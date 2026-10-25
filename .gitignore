@@ -1,0 +1,30 @@
+# Secretos: cualquier .env* se ignora, excepto la plantilla sin valores
+.env*
+!.env.example
+
+# Llaves y credenciales
+*.pem
+*.key
+secrets/
+credentials/
+
+# Dependencias y compilación
+node_modules/
+.next/
+out/
+build/
+coverage/
+
+# Vercel
+.vercel/
+
+# Configuración local de Claude Code (personal)
+.claude/settings.local.json
+
+# Sistema y registros
+.DS_Store
+Thumbs.db
+*.log
+npm-debug.log*
+*.tsbuildinfo
+next-env.d.ts
