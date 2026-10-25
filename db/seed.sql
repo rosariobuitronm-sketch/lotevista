@@ -228,3 +228,19 @@ FROM proyectos p,
 WHERE p.slug = 'jardines-del-chira'
 ON CONFLICT (proyecto_id, pregunta) DO UPDATE SET
   respuesta = EXCLUDED.respuesta, palabras_clave = EXCLUDED.palabras_clave;
+
+-- =====================================================================
+-- Modelos 3D referenciales (ítem 3). Autor, licencia y fuente de cada archivo.
+-- Créditos completos en CREDITOS-3D.md y en el README.
+-- =====================================================================
+UPDATE proyectos AS p SET
+  modelo_archivo  = v.archivo,
+  modelo_autor    = 'Kenney',
+  modelo_licencia = 'CC0 1.0',
+  modelo_fuente   = v.fuente
+FROM (VALUES
+  ('algarrobos-de-sunampe', '/modelos/casa-sunampe.glb', 'https://poly.pizza/m/7VSVwAg2T3'),
+  ('campina-de-huaral',     '/modelos/casa-huaral.glb',  'https://poly.pizza/m/htvFgnVP4d'),
+  ('jardines-del-chira',    '/modelos/casa-chira.glb',   'https://poly.pizza/m/sGgL4Nt7I7')
+) AS v(slug, archivo, fuente)
+WHERE p.slug = v.slug;

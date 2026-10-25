@@ -20,4 +20,12 @@ npm run build      # compila para producción
 
 ## Créditos de modelos 3D
 
-Pendiente (ítem 3 del backlog). Aquí se listará nombre, autor, licencia (CC0 o CC-BY) y enlace de cada modelo.
+Las casas 3D son **solo referenciales**: la inmobiliaria vende únicamente el lote. Los tres modelos son de **Kenney** (kenney.nl), publicados bajo licencia **CC0 1.0** (dominio público; no exige atribución, pero se cita por cortesía) y se obtuvieron en Poly Pizza. Están en `public/modelos/`.
+
+| Proyecto | Modelo | Autor | Licencia | Enlace | Archivo | Peso |
+|---|---|---|---|---|---|---|
+| Algarrobos de Sunampe | House | Kenney | CC0 1.0 | [poly.pizza/m/7VSVwAg2T3](https://poly.pizza/m/7VSVwAg2T3) | `casa-sunampe.glb` | 28 KB |
+| Campiña de Huaral | Two story house | Kenney | CC0 1.0 | [poly.pizza/m/htvFgnVP4d](https://poly.pizza/m/htvFgnVP4d) | `casa-huaral.glb` | 46 KB |
+| Jardines del Chira | Two story house | Kenney | CC0 1.0 | [poly.pizza/m/sGgL4Nt7I7](https://poly.pizza/m/sGgL4Nt7I7) | `casa-chira.glb` | 40 KB |
+
+Detalle completo en [`CREDITOS-3D.md`](CREDITOS-3D.md).

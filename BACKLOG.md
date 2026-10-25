@@ -15,7 +15,7 @@
 | 7 | Validación del lead | Reglas de nombre, celular de 9 dígitos, correo y consentimiento obligatorio; sin DNI | 1a | Texto de consentimiento (borrador abajo, **pendiente de validación legal**) |
 | 8 | Guardar y actualizar leads | Mismo celular actualiza el lead y suma historial; doble envío no duplica; una transacción | 2, 7 | Texto de consentimiento (ídem) |
 | 9 | Formulario de interés | Formulario en la ficha y `POST /api/leads` | 5, 8 | Texto de consentimiento (ídem) |
-| 10 | Login del asesor | Hash scrypt, cookie firmada de 8 horas, `/panel` protegido | 2 | — |
+| 10 | Login del asesor | Hash bcrypt, cookie firmada de 8 horas, `/panel` protegido | 2 | — |
 | 11 | Bloqueo por intentos fallidos | 5 fallos seguidos bloquean el login 15 minutos | 10 | — |
 | 12 | Panel de leads | Lista por proyecto con historial, estado vacío y texto escapado | 8, 10 | — |
 | 13 | RA "Ver en tu espacio" | Botón de RA, aviso en equipos sin RA y video corto | 6 | — |
@@ -140,7 +140,7 @@ Nota de implementación: la etiqueta visible sobre la casa lleva siempre el text
 
 **Pruebas:** TDD · **Depende de:** 2 · **ADR:** 0004
 - [ ] `/panel/login` inicia sesión con credenciales correctas y lleva a `/panel`.
-- [ ] La contraseña se compara contra el hash scrypt y nunca se registra en texto plano.
+- [ ] La contraseña se compara contra el hash bcrypt y nunca se registra en texto plano.
 - [ ] Cookie `httpOnly`, `secure`, `sameSite=lax`, firmada con `AUTH_SECRET`, caduca en 8 horas.
 - [ ] Sin sesión, `/panel` redirige al login y `/api/panel/*` responde 401.
 - [ ] Credenciales erróneas muestran "Usuario o contraseña incorrectos"; el cierre de sesión borra la cookie.

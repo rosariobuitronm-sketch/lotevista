@@ -1,5 +1,5 @@
 // @vitest-environment node
-import { readFileSync } from "node:fs";
+import { existsSync, readFileSync, statSync } from "node:fs";
 import { join } from "node:path";
 import { Pool } from "@neondatabase/serverless";
 import { afterAll, beforeAll, describe, expect, it } from "vitest";
@@ -172,6 +172,24 @@ describe.skipIf(!urlPrueba)("esquema y datos demo (rama de pruebas)", () => {
         expect(f.palabras_clave.length).toBeGreaterThan(0);
       }
     }
+  });
+
+  it("cada proyecto tiene su modelo 3D con autor, licencia libre y fuente, y el archivo existe y pesa menos de 5 MB", async () => {
+    const proyectos = await filas(
+      "SELECT slug, modelo_archivo, modelo_autor, modelo_licencia, modelo_fuente FROM proyectos",
+    );
+    const archivos = new Set<string>();
+    for (const p of proyectos) {
+      expect(p.modelo_archivo, p.slug).toMatch(/^\/modelos\/[\w-]+\.glb$/);
+      expect(p.modelo_autor, p.slug).toBe("Kenney");
+      expect(p.modelo_licencia, p.slug).toBe("CC0 1.0");
+      expect(p.modelo_fuente, p.slug).toMatch(/^https:\/\/poly\.pizza\/m\//);
+      const ruta = join(process.cwd(), "public", p.modelo_archivo);
+      expect(existsSync(ruta), ruta).toBe(true);
+      expect(statSync(ruta).size, ruta).toBeLessThan(5 * 1024 * 1024);
+      archivos.add(p.modelo_archivo);
+    }
+    expect(archivos.size).toBe(3); // un modelo distinto por proyecto
   });
 
   it("los textos públicos del seed no contienen la marca interna REVISAR", async () => {

@@ -12,7 +12,7 @@ Decisión delegada por el Product Owner: se aplica la opción más simple y segu
 
 ## Decisión
 
-- Tabla `asesores` con usuario y **contraseña guardada como hash** (`scrypt` de Node.js, con sal propia por usuario). Nunca se guarda ni se registra la contraseña en texto plano.
+- Tabla `asesores` con usuario y **contraseña guardada como hash** (`bcrypt`, con la librería `bcryptjs` y costo 10; la sal propia de cada contraseña queda dentro del mismo hash). Nunca se guarda ni se registra la contraseña en texto plano.
 - Al iniciar sesión se emite una cookie `httpOnly`, `secure` y `sameSite=lax` con un token firmado (librería `jose`) que caduca en 8 horas, firmado con `AUTH_SECRET` (variable de entorno).
 - Un filtro (proxy de Next.js) redirige a `/panel/login` cualquier acceso a `/panel/*` sin sesión válida, y las rutas `/api/panel/*` responden 401.
 - Mensaje de error de login único ("Usuario o contraseña incorrectos"), sin revelar cuál falló.
@@ -23,6 +23,8 @@ Decisión delegada por el Product Owner: se aplica la opción más simple y segu
 
 - **Auth.js / Clerk** — más completas (recuperación de contraseña, proveedores externos), pero agregan configuración y dependencia externa para 1 o 2 usuarios de demo.
 - **Contraseña única en variable de entorno** — más simple todavía, pero no permite varios asesores ni cumple "usuario y contraseña" de forma creíble.
+
+- **`scrypt` de Node.js (la opción inicial de este ADR)** — viene incluido en Node y no necesita librería, pero se cambió a `bcrypt` al implementar el ítem 2 por estas razones: `bcryptjs` está escrito en JavaScript puro, sin compilación nativa, así que instala igual en Windows y en Vercel; es un estándar muy conocido y documentado; y guarda sal, costo y hash en un solo texto de 60 caracteres, lo que simplifica la columna `password_hash` y las pruebas. Ambos algoritmos son seguros para este uso.
 
 ## Consecuencias
 
