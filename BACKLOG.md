@@ -104,13 +104,15 @@ Nota de implementación: la etiqueta visible sobre la casa lleva siempre el text
 
 > **Nota:** Local: la ficha responde en menos de 1 s con la base de Neon despierta. Falta medirla ya desplegada con 4G (no hice push).
 
-### 6 — Visor 3D + etiqueta "Imagen referencial"
+### 6 — Visor 3D + etiqueta "Imagen referencial" ✅
 
 **Pruebas:** TDD (componente) + Manual · **Depende de:** 3, 5 · **ADR:** 0002
-- [ ] La casa se muestra en `<model-viewer>` y se gira y acerca con mouse y dedo.
-- [ ] La etiqueta "Imagen referencial" es visible junto a la casa y legible en celular, con el texto de apoyo del borrador.
-- [ ] Si el modelo falla o tarda, se muestra la imagen del proyecto y la etiqueta sigue visible (se prueba bloqueando el `.glb`).
-- [ ] La etiqueta es un componente reutilizable; una prueba confirma que siempre incluye el texto, también con la imagen de respaldo.
+- [x] La casa se muestra en `<model-viewer>` y se gira y acerca con mouse y dedo.
+- [x] La etiqueta "Imagen referencial" es visible junto a la casa y legible en celular, con el texto de apoyo del borrador.
+- [x] Si el modelo falla o tarda, se muestra la imagen del proyecto y la etiqueta sigue visible (se prueba bloqueando el `.glb`).
+- [x] La etiqueta es un componente reutilizable; una prueba confirma que siempre incluye el texto, también con la imagen de respaldo.
+
+> **Nota:** Verificado en Edge: el modelo carga sin errores y, bloqueando el .glb, aparece la imagen con la etiqueta. El giro y zoom con dedo en un celular real queda para tu prueba manual.
 
 ### 7 — Validación del lead
 

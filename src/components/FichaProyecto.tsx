@@ -1,7 +1,6 @@
-import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { EtiquetaReferencial } from "@/components/EtiquetaReferencial";
+import { VisorCasa } from "@/components/VisorCasa";
 import { formatearArea, formatearMetros, formatearRangoArea, formatearSoles } from "@/lib/formato";
 import { obtenerProyecto, type ProyectoDetalle } from "@/lib/proyectos";
 
@@ -10,26 +9,6 @@ function Dato({ titulo, children }: { titulo: string; children: React.ReactNode 
     <div className="rounded-xl border border-marino/10 bg-white p-4">
       <dt className="text-sm font-semibold text-azul">{titulo}</dt>
       <dd className="mt-1 text-texto">{children}</dd>
-    </div>
-  );
-}
-
-// Imagen del proyecto con la casa referencial. El visor 3D (ítem 6) la reemplaza cuando hay modelo.
-function ImagenCasa({ proyecto }: { proyecto: ProyectoDetalle }) {
-  return (
-    <div className="space-y-2">
-      <div className="relative aspect-[3/2] w-full overflow-hidden rounded-2xl bg-celeste">
-        <Image
-          src={proyecto.imagenUrl}
-          alt={`Ilustración del proyecto ${proyecto.nombre}`}
-          fill
-          priority
-          sizes="(min-width: 1024px) 560px, 100vw"
-          className="object-cover"
-        />
-        <EtiquetaReferencial compacta className="absolute left-3 top-3" />
-      </div>
-      <EtiquetaReferencial />
     </div>
   );
 }
@@ -49,7 +28,7 @@ export function FichaProyecto({ proyecto }: { proyecto: ProyectoDetalle }) {
 
       <div className="grid gap-8 lg:grid-cols-2">
         <section aria-label="Casa referencial">
-          <ImagenCasa proyecto={proyecto} />
+          <VisorCasa nombre={proyecto.nombre} modeloUrl={proyecto.modeloArchivo} imagenUrl={proyecto.imagenUrl} />
         </section>
 
         <section aria-labelledby="resumen" className="space-y-4">
