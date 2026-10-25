@@ -94,13 +94,15 @@ Nota de implementación: la etiqueta visible sobre la casa lleva siempre el text
 - [x] Si la BD no responde, hay un mensaje amable en español, sin error técnico.
 - [x] Se ve bien en celular, sin desplazamiento horizontal.
 
-### 5 — Ficha del proyecto
+### 5 — Ficha del proyecto ⚠️ parcial: falta verificación manual
 
 **Pruebas:** TDD · **Depende de:** 4
-- [ ] `/proyectos/[slug]` muestra datos del proyecto, lotes referenciales (área, frente, fondo, precio), financiamiento y entrega como texto.
-- [ ] Un `slug` inexistente muestra una página amable con enlace al catálogo.
-- [ ] No hay simulador de cuotas, plano ni estado de venta.
+- [x] `/proyectos/[slug]` muestra datos del proyecto, lotes referenciales (área, frente, fondo, precio), financiamiento y entrega como texto.
+- [x] Un `slug` inexistente muestra una página amable con enlace al catálogo.
+- [x] No hay simulador de cuotas, plano ni estado de venta.
 - [ ] La ficha carga en menos de 3 s con 4G (se mide ya desplegada).
+
+> **Nota:** Local: la ficha responde en menos de 1 s con la base de Neon despierta. Falta medirla ya desplegada con 4G (no hice push).
 
 ### 6 — Visor 3D + etiqueta "Imagen referencial"
 
