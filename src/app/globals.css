@@ -1,26 +1,61 @@
 @import "tailwindcss";
 
+/* Paleta de LoteVista */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --marino: #0f2e4c;
+  --azul: #1e6fb8;
+  --celeste: #dcebf8;
+  --verde: #2bb673;
+  --coral: #ff7a59;
+  --arena: #e9dcc7;
+  --burbuja: #f6efe4;
+  --fondo: #faf8f4;
+  --texto: #1f2933;
+  --disponible: #2bb673;
+  --separado: #f2a900;
+  --vendido: #9ca3af;
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
+  --color-marino: var(--marino);
+  --color-azul: var(--azul);
+  --color-celeste: var(--celeste);
+  --color-verde: var(--verde);
+  --color-coral: var(--coral);
+  --color-arena: var(--arena);
+  --color-burbuja: var(--burbuja);
+  --color-fondo: var(--fondo);
+  --color-texto: var(--texto);
+  --color-disponible: var(--disponible);
+  --color-separado: var(--separado);
+  --color-vendido: var(--vendido);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+html {
+  color-scheme: light;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--fondo);
+  color: var(--texto);
+  font-family: var(--font-geist-sans), system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  overflow-x: hidden;
+}
+
+/* Foco visible para quien navega con teclado */
+:focus-visible {
+  outline: 3px solid var(--azul);
+  outline-offset: 2px;
+}
+
+/* Respeta a quien prefiere menos movimiento */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
 }

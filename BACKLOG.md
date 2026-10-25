@@ -52,45 +52,47 @@ Nota de implementación: la etiqueta visible sobre la casa lleva siempre el text
 
 ## Ítems
 
-### 1a — Proyecto Next.js, GitHub y primer despliegue
+### 1a — Proyecto Next.js, GitHub y primer despliegue ✅
 
 **Pruebas:** Manual · **ADR:** 0001, 0002
-- [ ] Existe un proyecto Next.js (App Router) con TypeScript y Tailwind y una página de inicio que dice "LoteVista".
-- [ ] `npm test` (Vitest) corre y muestra al menos una prueba en verde.
-- [ ] El código está en un repositorio de GitHub; `.env.local` está en `.gitignore`.
-- [ ] La aplicación está desplegada en Vercel (conectada al repositorio) y la URL pública abre la página de inicio.
-- [ ] El repositorio no contiene ningún secreto.
+- [x] Existe un proyecto Next.js (App Router) con TypeScript y Tailwind y una página de inicio que dice "LoteVista".
+- [x] `npm test` (Vitest) corre y muestra al menos una prueba en verde.
+- [x] El código está en un repositorio de GitHub; `.env.local` está en `.gitignore`.
+- [x] La aplicación está desplegada en Vercel (conectada al repositorio) y la URL pública abre la página de inicio.
+- [x] El repositorio no contiene ningún secreto.
 
-### 1b — Conexión a Neon y ruta de salud
+### 1b — Conexión a Neon y ruta de salud ✅
 
 **Pruebas:** Manual · **Depende de:** 1a · **ADR:** 0002
-- [ ] `DATABASE_URL` está en `.env.local` y en las variables de entorno de Vercel.
-- [ ] `/api/salud` responde que la base está accesible, sin mostrar datos secretos, tanto en local como en la URL pública.
-- [ ] Existe una rama de Neon exclusiva para pruebas, distinta de la de la demo.
+- [x] `DATABASE_URL` está en `.env.local` y en las variables de entorno de Vercel.
+- [x] `/api/salud` responde que la base está accesible, sin mostrar datos secretos, tanto en local como en la URL pública.
+- [x] Existe una rama de Neon exclusiva para pruebas, distinta de la de la demo.
 
-### 2 — Esquema de BD y datos demo
+### 2 — Esquema de BD y datos demo ✅
 
 **Pruebas:** TDD (rama de pruebas) · **Depende de:** 1b · **ADR:** 0007
-- [ ] `db/schema.sql` crea las 9 tablas del ADR 0007 y se puede ejecutar dos veces sin error.
-- [ ] No existe ninguna columna de DNI; `canal_origen` solo admite `web`, `qr_sala` o `holograma`.
-- [ ] `db/seed.sql` carga 3 proyectos ficticios con ubicación, precio desde, metraje, imagen, financiamiento y entrega, al menos 2 lotes y 5 preguntas de FAQ por proyecto.
-- [ ] Un script crea los usuarios de demo leyendo las contraseñas de variables de entorno; se guardan con hash.
+- [x] `db/schema.sql` crea las 9 tablas del ADR 0007 y se puede ejecutar dos veces sin error.
+- [x] No existe ninguna columna de DNI; `canal_origen` solo admite `web`, `qr_sala` o `holograma`.
+- [x] `db/seed.sql` carga 3 proyectos ficticios con ubicación, precio desde, metraje, imagen, financiamiento y entrega, al menos 2 lotes y 5 preguntas de FAQ por proyecto.
+- [x] Un script crea los usuarios de demo leyendo las contraseñas de variables de entorno; se guardan con hash.
 
-### 3 — Modelos 3D libres y créditos
+### 3 — Modelos 3D libres y créditos ⚠️ parcial: falta verificación manual
 
 **Pruebas:** Manual · **Depende de:** 1a
-- [ ] Hay al menos 1 modelo `.glb` (idealmente 3) con licencia CC0 o CC-BY, de menos de 5 MB cada uno (se anota el peso).
-- [ ] El `README.md` lista nombre, autor, licencia y enlace de cada modelo.
-- [ ] Autor, licencia, fuente y archivo quedan cargados en `proyectos`.
+- [x] Hay al menos 1 modelo `.glb` (idealmente 3) con licencia CC0 o CC-BY, de menos de 5 MB cada uno (se anota el peso).
+- [x] El `README.md` lista nombre, autor, licencia y enlace de cada modelo.
+- [x] Autor, licencia, fuente y archivo quedan cargados en `proyectos`.
 - [ ] El Product Owner aprueba visualmente los modelos.
 
-### 4 — Catálogo
+> **Nota:** El criterio de aprobación visual de los modelos queda para ti: los elegiste por la tabla y las vistas previas, pero aún no los has visto girar en la web (se verán en la ficha, ítem 6).
+
+### 4 — Catálogo ✅
 
 **Pruebas:** TDD · **Depende de:** 2
-- [ ] Muestra los 3 proyectos con nombre, ubicación, precio desde, metraje e imagen, leídos de la BD.
-- [ ] Cada tarjeta lleva a su ficha.
-- [ ] Si la BD no responde, hay un mensaje amable en español, sin error técnico.
-- [ ] Se ve bien en celular, sin desplazamiento horizontal.
+- [x] Muestra los 3 proyectos con nombre, ubicación, precio desde, metraje e imagen, leídos de la BD.
+- [x] Cada tarjeta lleva a su ficha.
+- [x] Si la BD no responde, hay un mensaje amable en español, sin error técnico.
+- [x] Se ve bien en celular, sin desplazamiento horizontal.
 
 ### 5 — Ficha del proyecto
 
