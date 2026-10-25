@@ -8,9 +8,15 @@
     "start": "next start",
     "lint": "eslint",
     "test": "vitest run",
-    "test:watch": "vitest"
+    "test:watch": "vitest",
+    "db:prueba": "node --env-file=.env.local scripts/db-aplicar.mjs prueba",
+    "db:produccion": "node --env-file=.env.local scripts/db-aplicar.mjs produccion",
+    "asesores:prueba": "node --env-file=.env.local scripts/crear-asesores.mjs prueba",
+    "asesores:produccion": "node --env-file=.env.local scripts/crear-asesores.mjs produccion"
   },
   "dependencies": {
+    "@neondatabase/serverless": "^1.2.0",
+    "bcryptjs": "^3.0.3",
     "next": "16.4.3",
     "react": "19.3.0",
     "react-dom": "19.3.0"
