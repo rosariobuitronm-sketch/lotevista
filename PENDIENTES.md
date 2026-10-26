@@ -67,3 +67,14 @@ Para subirlas, cuando vuelvas: `vercel env add AUTH_SECRET production` (y lo mis
 - **Límites:** 20 preguntas por sesión (cookie firmada, la 21 se bloquea) y 500 por IP en 24 h (HMAC con `IP_HASH_SECRET`; solo se guarda el hash). Si falta un secreto en el servidor, el asistente responde "no está disponible, usa el formulario".
 - **`maxDuration = 30`** en la ruta del asistente para cubrir los 8 s de espera; **falta confirmarlo ya desplegado en Vercel** (lo hago al subir).
 - **Scripts de apoyo** (no son parte de la app): `scripts/evaluar-asistente.mjs` (mide 8/10 y 5/5 con la IA real) y `scripts/probar-gemini.mjs` (compara modelos y su latencia).
+
+### Cosas que no pude hacer yo
+
+- **`.env.example` sin actualizar:** el sistema me impide editar ese archivo. Conviene que le agregues, sin valores, estos nombres: `AUTH_SECRET`, `COOKIE_SECRET`, `IP_HASH_SECRET`, `GEMINI_MODEL`, `SITE_URL`, `ASESOR_1_USUARIO`, `ASESOR_1_CLAVE` (ya debería estar `DATABASE_URL`, `DATABASE_URL_TEST` y `GEMINI_API_KEY`). El README ya lista las variables.
+- **Pruebas con dispositivos reales:** RA en un celular compatible y el video corto (ítem 13), escaneo del QR con un celular (ítem 15), uso del chat y del plano en un celular físico (ítems 20 y plano) y el holograma sobre la pirámide casera (ítem 22). Yo solo pude verificar con Edge de escritorio emulando tamaños de celular y tableta.
+- **Revisar el contenido inventado** marcado con `<!-- REVISAR -->` en `db/seed.sql` (nombres, precios, plazos, financiamiento, lotes y respuestas de FAQ) y los textos legales (consentimiento e "Imagen referencial"), que siguen siendo borradores.
+
+### Ítems que NO toqué (según tus instrucciones)
+
+- **23 (Modo Sala, opcional):** omitido, como pediste.
+- **24 (revisión de seguridad) y 25 (ensayo de demo, README final y video RA):** no estaban en el alcance 4-22. Antes de la demo conviene correrlos; ya hay varias comprobaciones hechas (secretos fuera del código, prueba que impide que la clave de Gemini llegue al navegador, panel protegido, sin campo de DNI).
