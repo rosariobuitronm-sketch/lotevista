@@ -4,6 +4,7 @@ import { CasaSobreLote } from "@/components/CasaSobreLote";
 import { ProveedorLote } from "@/components/ContextoLote";
 import { FormularioInteres } from "@/components/FormularioInteres";
 import { PlanoLotes } from "@/components/PlanoLotes";
+import { QrProyecto } from "@/components/QrProyecto";
 import { VisorCasa } from "@/components/VisorCasa";
 import { formatearArea, formatearMetros, formatearRangoArea, formatearSoles } from "@/lib/formato";
 import { obtenerProyecto, type EstadoLote, type ProyectoDetalle } from "@/lib/proyectos";
@@ -35,7 +36,12 @@ export function FichaProyecto({ proyecto }: { proyecto: ProyectoDetalle }) {
 
       <div className="grid gap-8 lg:grid-cols-2">
         <section id="visor3d" aria-label="Casa referencial" className="scroll-mt-4 space-y-3">
-          <VisorCasa nombre={proyecto.nombre} modeloUrl={proyecto.modeloArchivo} imagenUrl={proyecto.imagenUrl} />
+          <VisorCasa
+            nombre={proyecto.nombre}
+            modeloUrl={proyecto.modeloArchivo}
+            imagenUrl={proyecto.imagenUrl}
+            proyectoSlug={proyecto.slug}
+          />
           <CasaSobreLote />
         </section>
 
@@ -116,6 +122,8 @@ export function FichaProyecto({ proyecto }: { proyecto: ProyectoDetalle }) {
           <p className="mt-1">{proyecto.entrega}</p>
         </div>
       </section>
+      <QrProyecto slug={proyecto.slug} nombre={proyecto.nombre} />
+
       <section aria-labelledby="titulo-contacto" id="contacto" className="max-w-2xl scroll-mt-4">
         <h2 id="titulo-contacto" className="sr-only">
           Contacto

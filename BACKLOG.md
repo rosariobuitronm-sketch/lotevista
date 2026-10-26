@@ -192,12 +192,14 @@ Nota de implementación: la etiqueta visible sobre la casa lleva siempre el text
 
 > **Nota:** Verificado en Edge: ?canal=qr_sala fija una cookie firmada, arrastrar el modelo guarda uso3d solo en sessionStorage (no hubo ningún POST antes del formulario) y el lead quedó con canal qr_sala y uso_3d verdadero.
 
-### 15 — QR por proyecto
+### 15 — QR por proyecto ⚠️ parcial: falta verificación manual
 
 **Pruebas:** TDD + Manual · **Depende de:** 5
-- [ ] Cada proyecto tiene un QR generado en el servidor que abre su ficha con canal `qr_sala`.
+- [x] Cada proyecto tiene un QR generado en el servidor que abre su ficha con canal `qr_sala`.
 - [ ] El QR se puede ver en pantalla y descargar o imprimir; se probó con un celular real.
-- [ ] Un QR de un proyecto inexistente lleva a la página amable del ítem 5.
+- [x] Un QR de un proyecto inexistente lleva a la página amable del ítem 5.
+
+> **Nota:** Verificado por programa: el QR se decodifica a https://…/proyectos/<slug>?canal=qr_sala y la imagen carga en la ficha. **Falta escanearlo con un celular real** (criterio 2).
 
 ### 16 — Asistente: lógica acotada a los datos
 

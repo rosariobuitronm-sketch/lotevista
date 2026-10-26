@@ -3,7 +3,7 @@ import { NOMBRE_EMPRESA } from "@/lib/textos";
 
 export function Pie() {
   return (
-    <footer className="mt-12 border-t border-marino/10 bg-marino text-celeste">
+    <footer className="mt-12 border-t border-marino/10 bg-marino text-celeste print:hidden">
       <div className="mx-auto flex w-full max-w-6xl flex-col gap-2 px-4 py-6 text-sm">
         <p>
           <strong className="text-white">{NOMBRE_EMPRESA}</strong> · Se vende únicamente el lote; la construcción no
