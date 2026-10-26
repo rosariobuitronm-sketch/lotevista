@@ -143,9 +143,12 @@ describe.skipIf(!urlPrueba)("límite por IP (rama de pruebas)", () => {
   });
 
   it("pasadas 24 horas la IP empieza una ventana nueva (el bloqueo termina)", async () => {
-    await pool.query("INSERT INTO limite_ip (ip_hash, ventana_inicio, contador) VALUES ('test-ip-e', $1, 600)", [T0]);
-    expect((await registrarPreguntaPorIp(sql(), "test-ip-e", horas(1))).permitido).toBe(false);
-    expect(await registrarPreguntaPorIp(sql(), "test-ip-e", horas(25))).toEqual({ permitido: true, contador: 1 });
+    await pool.query("INSERT INTO limite_ip (ip_hash, ventana_inicio, contador) VALUES ('test-ip-e', $1, 600)", [horas(-1)]);
+    expect((await registrarPreguntaPorIp(sql(), "test-ip-e", T0)).permitido).toBe(false); // sigue bloqueada
+    // Se simula el paso del tiempo retrocediendo el inicio de la ventana. (Nunca se adelanta el reloj: la limpieza de
+    // "filas de más de 24 h" también borraría las filas recientes que otras pruebas crean en paralelo.)
+    await pool.query("UPDATE limite_ip SET ventana_inicio = $1 WHERE ip_hash = 'test-ip-e'", [horas(-25)]);
+    expect(await registrarPreguntaPorIp(sql(), "test-ip-e", T0)).toEqual({ permitido: true, contador: 1 });
   });
 
   it("solo guarda el hash, el inicio de la ventana y el contador: ni IP real ni contenido", async () => {

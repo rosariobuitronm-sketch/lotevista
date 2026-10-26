@@ -1,16 +1,20 @@
 // @vitest-environment node
 import { Pool } from "@neondatabase/serverless";
 import { afterAll, beforeAll, describe, expect, it, vi } from "vitest";
+import { hashIp } from "@/lib/asistente/limites";
 
 // Ítem 21: las preguntas del chat viajan con el formulario y se guardan solo con consentimiento.
 // Integración real contra la rama de pruebas de Neon (sin mocks).
 const urlPrueba = process.env.DATABASE_URL_TEST;
 const COOKIES = "secreto-de-cookies-de-prueba-0123456789-abcdef";
+const IP_SECRETO = "secreto-para-hash-de-ip-de-prueba-9876543210-xyz";
 
 describe.skipIf(!urlPrueba)("las preguntas del chat y el lead (rama de pruebas)", () => {
   let pool: Pool;
   let POST: (r: Request) => Promise<Response>;
   let n = 0;
+  let ips = 0;
+  const ipsUsadas: string[] = []; // cada envío usa su propia IP para no chocar con el límite de 20 por IP
   const celular = () => `91004${String(++n).padStart(4, "0")}`;
   const limpiar = () => pool.query("DELETE FROM leads WHERE celular LIKE '91004%'");
   const base = (cel: string, extra: object = {}) => ({
@@ -21,8 +25,17 @@ describe.skipIf(!urlPrueba)("las preguntas del chat y el lead (rama de pruebas)"
     proyecto: "algarrobos-de-sunampe",
     ...extra,
   });
-  const enviar = (cuerpo: unknown) =>
-    POST(new Request("http://localhost/api/leads", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify(cuerpo) }));
+  const enviar = (cuerpo: unknown) => {
+    const ip = `10.88.0.${++ips}`;
+    ipsUsadas.push(ip);
+    return POST(
+      new Request("http://localhost/api/leads", {
+        method: "POST",
+        headers: { "content-type": "application/json", "x-forwarded-for": ip },
+        body: JSON.stringify(cuerpo),
+      }),
+    );
+  };
   const preguntasDe = async (cel: string) =>
     (
       await pool.query(
@@ -38,10 +51,12 @@ describe.skipIf(!urlPrueba)("las preguntas del chat y el lead (rama de pruebas)"
     await limpiar();
     vi.stubEnv("DATABASE_URL", urlPrueba!);
     vi.stubEnv("COOKIE_SECRET", COOKIES);
+    vi.stubEnv("IP_HASH_SECRET", IP_SECRETO);
     POST = (await import("./route")).POST;
   });
   afterAll(async () => {
     await limpiar();
+    for (const ip of ipsUsadas) await pool.query("DELETE FROM limite_ip WHERE ip_hash = $1", [hashIp(`leads|${ip}`, IP_SECRETO)]);
     await pool.end();
     vi.unstubAllEnvs();
   });

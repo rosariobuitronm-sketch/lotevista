@@ -119,13 +119,18 @@ describe("VisorCasa sobre un terreno con las medidas del lote", () => {
     await waitFor(() => expect(visor(container)).not.toBeNull());
     Object.defineProperty(visor(container), "model", { value: { materials: [terreno, material("pared")] }, configurable: true });
 
-    act(() => {
-      fireEvent(visor(container), new CustomEvent("ar-status", { detail: { status: "session-started" } }));
+    // Se reintenta hasta que el oyente del visor esté enganchado (bajo carga, React tarda un instante en hacerlo).
+    await waitFor(() => {
+      act(() => {
+        fireEvent(visor(container), new CustomEvent("ar-status", { detail: { status: "session-started" } }));
+      });
+      expect(terreno.llamadas.at(-1)?.[3]).toBe(0);
     });
-    expect(terreno.llamadas.at(-1)![3]).toBe(0);
-    act(() => {
-      fireEvent(visor(container), new CustomEvent("ar-status", { detail: { status: "not-presenting" } }));
+    await waitFor(() => {
+      act(() => {
+        fireEvent(visor(container), new CustomEvent("ar-status", { detail: { status: "not-presenting" } }));
+      });
+      expect(terreno.llamadas.at(-1)?.[3]).toBe(1);
     });
-    expect(terreno.llamadas.at(-1)![3]).toBe(1);
   });
 });

@@ -9,6 +9,8 @@ import type { Sql } from "@/lib/proyectos";
 
 export const LIMITE_SESION = 20;
 export const LIMITE_IP = 500;
+/** Envíos del formulario de interés permitidos por IP en 24 horas (SP-05 del informe de seguridad). Cuenta aparte del asistente. */
+export const LIMITE_LEADS_IP = 20;
 export const VENTANA_IP_HORAS = 24;
 export const COOKIE_ASISTENTE = "lv_asistente";
 export const DURACION_COOKIE_SEGUNDOS = 12 * 60 * 60;

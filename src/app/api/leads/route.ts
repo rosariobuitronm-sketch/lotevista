@@ -1,6 +1,7 @@
 import { responderError, responderOk } from "@/lib/api";
+import { hashIp, ipDeLaPeticion, LIMITE_LEADS_IP, registrarPreguntaPorIp } from "@/lib/asistente/limites";
 import { COOKIE_CANAL, leerCanal, leerCookie } from "@/lib/canal";
-import { getPool } from "@/lib/db";
+import { getPool, getSql } from "@/lib/db";
 import { validarLead } from "@/lib/lead-schema";
 import { guardarLead, ProyectoInexistenteError } from "@/lib/leads";
 import { CONSENTIMIENTO_VERSION } from "@/lib/textos";
@@ -29,6 +30,20 @@ export async function POST(request: Request) {
       mensaje: "Revisa los datos del formulario.",
       campos: validacion.errores,
     });
+  }
+
+  // Límite de envíos por IP en 24 h: frena el relleno de la base con leads falsos. Solo se guarda el hash de la IP.
+  try {
+    const hash = hashIp(`leads|${ipDeLaPeticion(request.headers)}`, process.env.IP_HASH_SECRET);
+    const { permitido } = await registrarPreguntaPorIp(getSql(), hash, new Date(), LIMITE_LEADS_IP);
+    if (!permitido) {
+      return responderError(429, {
+        codigo: "limite",
+        mensaje: "Recibimos muchos envíos desde tu conexión. Por favor, inténtalo más tarde o comunícate con un asesor.",
+      });
+    }
+  } catch {
+    return responderError(500, { codigo: "servidor", mensaje: "No pudimos guardar tus datos. Intenta de nuevo." });
   }
 
   const canal = await leerCanal(leerCookie(request.headers.get("cookie"), COOKIE_CANAL), process.env.COOKIE_SECRET);
