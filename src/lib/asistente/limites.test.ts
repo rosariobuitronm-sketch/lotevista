@@ -98,7 +98,9 @@ const urlPrueba = process.env.DATABASE_URL_TEST;
 describe.skipIf(!urlPrueba)("límite por IP (rama de pruebas)", () => {
   let pool: Pool;
   const sql = () => getSql(urlPrueba);
-  const T0 = new Date("2026-10-20T15:00:00Z");
+  // La hora de la prueba es la actual: así la limpieza de "filas de más de 24 h" que hacen otras pruebas en paralelo
+  // (con su propia hora) nunca borra estas filas a mitad de camino.
+  const T0 = new Date();
   const horas = (h: number) => new Date(T0.getTime() + h * 3600_000);
   const limpiar = () => pool.query("DELETE FROM limite_ip WHERE ip_hash LIKE 'test-ip-%'");
   const fila = async (hash: string) => (await pool.query("SELECT * FROM limite_ip WHERE ip_hash = $1", [hash])).rows[0];
