@@ -220,13 +220,15 @@ Nota de implementación: la etiqueta visible sobre la casa lleva siempre el text
 
 > **Nota:** Las pruebas cubren cuota agotada, servicio caído, sin conexión, falta de clave, respuesta bloqueada y error genérico, más el corte exacto a los 8 s con temporizadores simulados.
 
-### 18 — Asistente: límites
+### 18 — Asistente: límites ✅
 
 **Pruebas:** TDD · **Depende de:** 2 · **ADR:** 0005
-- [ ] Una cookie firmada cuenta las preguntas: tras 20 por sesión se avisa del límite y se sugiere el formulario.
-- [ ] Límite de 500 por IP en 24 h con HMAC-SHA256 y `IP_HASH_SECRET`; no se guarda la IP real ni el contenido.
-- [ ] Las filas de `limite_ip` con más de 24 h se borran en cada escritura; los límites son constantes configurables.
-- [ ] Las pruebas confirman el bloqueo en la pregunta 21 de sesión y en la 501 de IP.
+- [x] Una cookie firmada cuenta las preguntas: tras 20 por sesión se avisa del límite y se sugiere el formulario.
+- [x] Límite de 500 por IP en 24 h con HMAC-SHA256 y `IP_HASH_SECRET`; no se guarda la IP real ni el contenido.
+- [x] Las filas de `limite_ip` con más de 24 h se borran en cada escritura; los límites son constantes configurables.
+- [x] Las pruebas confirman el bloqueo en la pregunta 21 de sesión y en la 501 de IP.
+
+> **Nota:** El bloqueo se prueba en la pregunta 21 de sesión y en la 501 de IP (con filas precargadas en la rama de pruebas, sin repetir 500 llamadas).
 
 ### 19 — Ruta `/api/asistente`
 

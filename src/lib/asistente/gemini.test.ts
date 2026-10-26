@@ -85,7 +85,7 @@ describe("crearGeneradorGemini", () => {
       modelo: "m",
       fetchFn: async () => new Response(`error con ${CLAVE}`, { status: 500 }),
     });
-    const error = await generar("i", "p", {}).catch((e) => e as Error);
+    const error = (await generar("i", "p", {}).catch((e) => e)) as Error;
     expect(String(error.message)).not.toContain(CLAVE);
     expect(JSON.stringify(error)).not.toContain(CLAVE);
   });

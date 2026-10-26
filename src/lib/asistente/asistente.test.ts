@@ -146,7 +146,7 @@ describe("respaldo de FAQ cuando la IA falla (ADR 0005)", () => {
     vi.useFakeTimers();
     try {
       let senal: AbortSignal | undefined;
-      const generar = (_i: string, _p: string, o: { signal: AbortSignal }) => {
+      const generar = (_i: string, _p: string, o: { signal?: AbortSignal }) => {
         senal = o.signal;
         return new Promise<string>(() => {}); // nunca responde
       };
