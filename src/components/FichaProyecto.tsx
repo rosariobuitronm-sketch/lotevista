@@ -4,10 +4,10 @@ import { AsistenteChat } from "@/components/AsistenteChat";
 import { CasaSobreLote } from "@/components/CasaSobreLote";
 import { ProveedorLote } from "@/components/ContextoLote";
 import { FormularioInteres } from "@/components/FormularioInteres";
-import { PlanoLotes } from "@/components/PlanoLotes";
 import { loteDeReferencia } from "@/lib/plano";
 import { QrProyecto } from "@/components/QrProyecto";
 import { VisorCasa } from "@/components/VisorCasa";
+import { VistaPrincipal } from "@/components/VistaPrincipal";
 import { formatearArea, formatearMetros, formatearRangoArea, formatearSoles } from "@/lib/formato";
 import { obtenerProyecto, type EstadoLote, type ProyectoDetalle } from "@/lib/proyectos";
 
@@ -36,6 +36,9 @@ export function FichaProyecto({ proyecto }: { proyecto: ProyectoDetalle }) {
         <h1 className="mt-2 text-3xl font-extrabold tracking-tight text-marino sm:text-4xl">{proyecto.nombre}</h1>
         <p className="text-lg text-texto/80">{ubicacion}</p>
       </div>
+
+      {/* Vista principal: maqueta 3D del proyecto (o el plano 2D como respaldo). */}
+      <VistaPrincipal proyecto={proyecto} />
 
       <div className="grid gap-8 lg:grid-cols-2">
         <section id="visor3d" aria-label="Casa referencial" className="scroll-mt-4 space-y-3">
@@ -68,8 +71,6 @@ export function FichaProyecto({ proyecto }: { proyecto: ProyectoDetalle }) {
           </dl>
         </section>
       </div>
-
-      <PlanoLotes lotes={proyecto.lotes} nombreProyecto={proyecto.nombre} />
 
       <details className="rounded-xl border border-marino/10 bg-white">
         <summary className="cursor-pointer px-4 py-3 font-semibold text-marino">
