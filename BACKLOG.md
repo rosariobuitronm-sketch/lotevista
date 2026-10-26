@@ -173,20 +173,24 @@ Nota de implementación: la etiqueta visible sobre la casa lleva siempre el text
 
 > **Nota:** Verificado en Edge de punta a punta (contra la rama de pruebas): un lead enviado desde el formulario público aparece en el panel con su historial.
 
-### 13 — RA "Ver en tu espacio"
+### 13 — RA "Ver en tu espacio" ⚠️ parcial: falta verificación manual
 
 **Pruebas:** Manual · **Depende de:** 6
 - [ ] El botón activa la RA en un celular compatible con ARCore o ARKit.
-- [ ] En laptop o equipo sin RA se mantiene el 3D con un aviso claro en español.
-- [ ] La etiqueta "Imagen referencial" sigue visible (o se anota la limitación del modo RA del sistema).
+- [x] En laptop o equipo sin RA se mantiene el 3D con un aviso claro en español.
+- [x] La etiqueta "Imagen referencial" sigue visible (o se anota la limitación del modo RA del sistema).
 - [ ] Se probó en al menos 1 celular compatible prestado y hay un video corto en el repositorio.
 
-### 14 — Canal de origen y uso de 3D/RA
+> **Nota:** Verificado en Edge de escritorio: sin RA el 3D se mantiene con el aviso en español y la etiqueta Imagen referencial va dentro del visor (así se ve también en la RA de Chrome/WebXR). **Falta, y no puedo hacerlo yo:** probar el botón en un celular compatible (Android con ARCore o iPhone) y grabar el video corto. **Limitación conocida:** en Scene Viewer (Android) y Quick Look (iPhone) el sistema dibuja la RA en su propia pantalla y no permite superponer la etiqueta; por eso se recuerda justo antes de entrar.
+
+### 14 — Canal de origen y uso de 3D/RA ✅
 
 **Pruebas:** TDD · **Depende de:** 9, 13 · **ADR:** 0006
-- [ ] El canal se toma del parámetro de la URL y se guarda en una cookie firmada; si falta o es inválido, es `web`.
-- [ ] El navegador recuerda en memoria el uso de 3D/RA y no envía nada al servidor antes del formulario.
-- [ ] Al enviar, el lead guarda canal y marcas "usó 3D" y "usó RA".
+- [x] El canal se toma del parámetro de la URL y se guarda en una cookie firmada; si falta o es inválido, es `web`.
+- [x] El navegador recuerda en memoria el uso de 3D/RA y no envía nada al servidor antes del formulario.
+- [x] Al enviar, el lead guarda canal y marcas "usó 3D" y "usó RA".
+
+> **Nota:** Verificado en Edge: ?canal=qr_sala fija una cookie firmada, arrastrar el modelo guarda uso3d solo en sessionStorage (no hubo ningún POST antes del formulario) y el lead quedó con canal qr_sala y uso_3d verdadero.
 
 ### 15 — QR por proyecto
 
