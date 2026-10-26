@@ -121,13 +121,15 @@ describe.skipIf(!urlPrueba)("POST /api/asistente (rama de pruebas, Gemini simula
   });
 
   it("no guarda preguntas ni respuestas: solo el contador por IP en hash", async () => {
-    const antes = (await pool.query("SELECT (SELECT count(*) FROM lead_preguntas)::int a, (SELECT count(*) FROM leads)::int b")).rows[0];
-    await pedir(POST, { ...valido, pregunta: "¿Cuánto cuesta el lote más barato? Mi celular es 987654321" });
-    const despues = (await pool.query("SELECT (SELECT count(*) FROM lead_preguntas)::int a, (SELECT count(*) FROM leads)::int b")).rows[0];
-    expect(despues).toEqual(antes);
+    // Se busca ESTA pregunta en concreto (otras pruebas en paralelo también crean leads, así que no sirve contar filas).
+    const marca = "Pregunta-única-" + Date.now();
+    await pedir(POST, { ...valido, pregunta: `¿Cuánto cuesta el lote más barato? ${marca} mi celular es 987654321` });
+    const guardadas = await pool.query("SELECT 1 FROM lead_preguntas WHERE pregunta LIKE $1 OR respuesta LIKE $1", [`%${marca}%`]);
+    expect(guardadas.rowCount).toBe(0);
     const { rows } = await pool.query("SELECT * FROM limite_ip WHERE ip_hash = $1", [hashDeIp()]);
     expect(rows).toHaveLength(1);
-    expect(JSON.stringify(rows[0])).not.toMatch(/987654321|cuesta|203\.0\.113/);
+    expect(Object.keys(rows[0]).sort()).toEqual(["contador", "ip_hash", "ventana_inicio"]);
+    expect(JSON.stringify(rows[0])).not.toMatch(/987654321|cuesta|203.0.113|Pregunta-única/);
   });
 
   it("con la IA caída responde el FAQ y el cliente nunca ve un error técnico", async () => {
