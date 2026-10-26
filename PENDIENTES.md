@@ -87,3 +87,10 @@ Para subirlas, cuando vuelvas: `vercel env add AUTH_SECRET production` (y lo mis
 - **Una sola etiqueta "Imagen referencial" visible**, bajo el visor y junto al texto legal (como pediste). En el visor hay otra **oculta** que aparece solo durante una sesión de RA de Chrome, para no perder la regla de mostrarla en la RA donde el navegador lo permite.
 - **En RA solo se ve la casa:** al iniciar la RA el terreno y las estacas se vuelven transparentes (y reaparecen al salir). En Quick Look (iPhone) y Scene Viewer (Android sin WebXR) el sistema arma su propia vista y **no pude verificar** si la losa verde queda oculta: hay que revisarlo con un celular real.
 - **PRD ajustado:** la línea sobre el plano ahora dice que no hay disponibilidad en tiempo real, pero sí un plano de lotización referencial con estados de demostración.
+
+### Maqueta 3D, pruebas E2E y README final (último bloque)
+
+- **Maqueta 3D inmersiva** (three.js) como vista principal de la ficha, con el plano 2D como respaldo (sin WebGL, celular lento, fallo de la escena o botón «Ver plano 2D»). Ya está en producción. Verificada en un navegador de escritorio y en tamaño de celular; **falta verla en un celular real** (rendimiento con gráficos reales) y probar la RA del lote en un celular con ARCore.
+- **Pruebas E2E (Playwright)** en `e2e/`: 3 flujos en verde y comprobado que se ponen en rojo si se rompe la app. Corren contra la rama de pruebas y sin clave de Gemini. Comando: `npm run test:e2e`. Aviso conocido: durante el primer acceso a `/panel` el servidor escribe en su registro un aviso de Next.js sobre `new Date()` (no aparece al compilar y el panel redirige bien, también en producción); conviene revisarlo si se quiere un registro limpio.
+- **README final** listo. La credencial de demo `ASESOR / ASESOR123` se comprobó contra la base de producción.
+- **Sigue pendiente para el ítem 25:** video corto de la RA en un celular compatible (guardarlo en el repositorio y enlazarlo en el README), ensayo final de la demo en la URL pública, despertar Neon antes de presentar y las decisiones del `SECURITY-REPORT.md` (SP-06 retención de 12 meses, SP-09 límite de intentos de login por IP).
