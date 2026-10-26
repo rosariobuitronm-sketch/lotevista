@@ -252,12 +252,14 @@ Nota de implementación: la etiqueta visible sobre la casa lleva siempre el text
 
 > **Nota:** Verificado en Edge en ancho de celular (390 px) con la IA real: sugerencias, pregunta con Enter, indicador de carga, derivación con enlace al formulario, historial que sobrevive a recargar y sin desborde horizontal. Falta usarlo en un celular físico.
 
-### 21 — Preguntas del chat en el lead y el panel
+### 21 — Preguntas del chat en el lead y el panel ✅
 
 **Pruebas:** TDD · **Depende de:** 20, 9, 12 · **ADR:** 0006
-- [ ] Al enviar el formulario con consentimiento, el chat se guarda en `lead_preguntas` con proyecto, respuesta y si el asistente sabía.
-- [ ] Sin consentimiento no se guarda ninguna pregunta; sin chat, el lead se guarda igual.
-- [ ] El panel muestra las preguntas como texto escapado; se limitan cantidad y tamaño.
+- [x] Al enviar el formulario con consentimiento, el chat se guarda en `lead_preguntas` con proyecto, respuesta y si el asistente sabía.
+- [x] Sin consentimiento no se guarda ninguna pregunta; sin chat, el lead se guarda igual.
+- [x] El panel muestra las preguntas como texto escapado; se limitan cantidad y tamaño.
+
+> **Nota:** Pruebas de integración contra la rama de pruebas y verificación en Edge: dos preguntas del chat viajaron con el formulario y quedaron en lead_preguntas con su respuesta y si el asistente sabía.
 
 ### 22 — Modo holograma
 
