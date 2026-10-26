@@ -132,15 +132,17 @@ Nota de implementación: la etiqueta visible sobre la casa lleva siempre el text
 - [x] Todo ocurre en una transacción; sin consentimiento no se guarda nada.
 - [x] Las pruebas usan solo la rama de pruebas y limpian sus datos.
 
-### 9 — Formulario de interés
+### 9 — Formulario de interés ✅
 
 **Pruebas:** TDD (`POST /api/leads`) + Manual · **Depende de:** 5, 8 · **ADR:** 0003
-- [ ] Formulario con nombre, celular, correo, horario (opcional) y casilla con el texto de consentimiento del borrador.
-- [ ] No se envía sin consentimiento; los errores salen en español junto a cada campo.
-- [ ] El botón se desactiva tras el primer clic.
-- [ ] Éxito: mensaje de agradecimiento; fallo del servidor: mensaje amable con opción de reintentar.
-- [ ] La ruta responde con la forma `{ ok, datos | error }` y no devuelve datos de otros leads.
-- [ ] No se pide DNI.
+- [x] Formulario con nombre, celular, correo, horario (opcional) y casilla con el texto de consentimiento del borrador.
+- [x] No se envía sin consentimiento; los errores salen en español junto a cada campo.
+- [x] El botón se desactiva tras el primer clic.
+- [x] Éxito: mensaje de agradecimiento; fallo del servidor: mensaje amable con opción de reintentar.
+- [x] La ruta responde con la forma `{ ok, datos | error }` y no devuelve datos de otros leads.
+- [x] No se pide DNI.
+
+> **Nota:** Verificado en Edge de punta a punta (contra la rama de pruebas): enviar vacío muestra los errores, el doble clic envía un solo POST y el lead queda guardado con consentimiento, horario y canal web.
 
 ### 10 — Login del asesor
 

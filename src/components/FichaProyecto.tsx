@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { FormularioInteres } from "@/components/FormularioInteres";
 import { VisorCasa } from "@/components/VisorCasa";
 import { formatearArea, formatearMetros, formatearRangoArea, formatearSoles } from "@/lib/formato";
 import { obtenerProyecto, type ProyectoDetalle } from "@/lib/proyectos";
@@ -98,6 +99,12 @@ export function FichaProyecto({ proyecto }: { proyecto: ProyectoDetalle }) {
           <h3 className="text-lg font-bold text-marino">Entrega</h3>
           <p className="mt-1">{proyecto.entrega}</p>
         </div>
+      </section>
+      <section aria-labelledby="contacto" id="contacto" className="max-w-2xl scroll-mt-4">
+        <h2 id="contacto" className="sr-only">
+          Contacto
+        </h2>
+        <FormularioInteres proyectoSlug={proyecto.slug} proyectoNombre={proyecto.nombre} />
       </section>
     </article>
   );
