@@ -1,7 +1,9 @@
 import { act, fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { agregarPregunta, limpiarActividad, marcarUso } from "@/lib/actividad";
+import { ProveedorLote, useLote } from "@/components/ContextoLote";
 import { FormularioInteres } from "@/components/FormularioInteres";
+import type { Lote } from "@/lib/proyectos";
 
 const SLUG = "algarrobos-de-sunampe";
 const fetchMock = vi.fn();
@@ -151,5 +153,62 @@ describe("FormularioInteres", () => {
     enviar();
     await waitFor(() => expect(campo(/Correo/)).toHaveAccessibleDescription(/correo válido/));
     expect(screen.getByRole("button", { name: /Quiero que me contacten/ })).toBeEnabled();
+  });
+});
+
+const LOTE: Lote = { codigo: "Mz. A - Lt. 5", manzana: "A", numero: 5, estado: "disponible", areaM2: 120, frenteM: 8, fondoM: 15, precio: 37200 };
+function ElegirLote() {
+  const { elegirInteres } = useLote();
+  return (
+    <button type="button" onClick={() => elegirInteres(LOTE)}>
+      elegir lote del plano
+    </button>
+  );
+}
+
+describe("FormularioInteres con el lote elegido en el plano", () => {
+  beforeEach(() => {
+    window.sessionStorage.clear();
+    limpiarActividad(SLUG);
+    fetchMock.mockReset();
+    vi.stubGlobal("fetch", fetchMock);
+  });
+  afterEach(() => {
+    vi.unstubAllGlobals();
+  });
+  const montar = () =>
+    render(
+      <ProveedorLote>
+        <ElegirLote />
+        <FormularioInteres proyectoSlug={SLUG} proyectoNombre="Algarrobos de Sunampe" />
+      </ProveedorLote>,
+    );
+
+  it("sin lote elegido no muestra ninguna etiqueta de lote", () => {
+    montar();
+    expect(screen.queryByText(/Lote de interés/)).not.toBeInTheDocument();
+  });
+
+  it("precarga el lote elegido y lo envía junto con los datos", async () => {
+    fetchMock.mockReturnValue(respuesta(200, { ok: true, datos: { mensaje: "¡Gracias!" } }));
+    montar();
+    fireEvent.click(screen.getByRole("button", { name: "elegir lote del plano" }));
+    expect(screen.getByText("Lote de interés: Mz. A - Lt. 5 · 120 m²")).toBeInTheDocument();
+    llenarBien();
+    enviar();
+    await waitFor(() => expect(fetchMock).toHaveBeenCalledOnce());
+    expect(JSON.parse(fetchMock.mock.calls[0][1].body).lote).toBe("Mz. A - Lt. 5");
+  });
+
+  it("el lote precargado se puede quitar y entonces no se envía", async () => {
+    fetchMock.mockReturnValue(respuesta(200, { ok: true, datos: { mensaje: "¡Gracias!" } }));
+    montar();
+    fireEvent.click(screen.getByRole("button", { name: "elegir lote del plano" }));
+    fireEvent.click(screen.getByRole("button", { name: /Quitar el lote/ }));
+    expect(screen.queryByText(/Lote de interés/)).not.toBeInTheDocument();
+    llenarBien();
+    enviar();
+    await waitFor(() => expect(fetchMock).toHaveBeenCalledOnce());
+    expect(JSON.parse(fetchMock.mock.calls[0][1].body)).not.toHaveProperty("lote");
   });
 });

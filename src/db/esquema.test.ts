@@ -45,7 +45,7 @@ describe.skipIf(!urlPrueba)("esquema y datos demo (rama de pruebas)", () => {
   it("el esquema y el seed, aplicados dos veces seguidas, no dejan duplicados", async () => {
     const cuentas = async (tabla: string) => (await filas(`SELECT count(*)::int AS n FROM ${tabla}`))[0].n;
     expect(await cuentas("proyectos")).toBe(3);
-    expect(await cuentas("lotes")).toBe(15);
+    expect(await cuentas("lotes")).toBe(66); // 22 por proyecto
     expect(await cuentas("faq")).toBe(24);
   });
 
@@ -158,6 +158,65 @@ describe.skipIf(!urlPrueba)("esquema y datos demo (rama de pruebas)", () => {
       expect(Number(p.area_desde)).toBe(Math.min(...lotes.map((l) => Number(l.area_m2))));
       expect(Number(p.area_hasta)).toBe(Math.max(...lotes.map((l) => Number(l.area_m2))));
     }
+  });
+
+  it("cada proyecto tiene entre 20 y 24 lotes numerados por manzana, como en un plano de lotización", async () => {
+    const proyectos = await filas("SELECT id, slug FROM proyectos");
+    for (const p of proyectos) {
+      const lotes = await filas("SELECT * FROM lotes WHERE proyecto_id = $1", [p.id]);
+      expect(lotes.length, p.slug).toBeGreaterThanOrEqual(20);
+      expect(lotes.length, p.slug).toBeLessThanOrEqual(24);
+      const manzanas = new Set(lotes.map((l) => l.manzana));
+      expect([...manzanas].sort(), p.slug).toEqual(["A", "B", "C"]);
+      for (const l of lotes) {
+        expect(l.codigo, p.slug).toBe(`Mz. ${l.manzana} - Lt. ${l.numero}`);
+        expect(Number(l.area_m2)).toBeGreaterThanOrEqual(90);
+        expect(Number(l.area_m2)).toBeLessThanOrEqual(200);
+      }
+      const unicos = new Set(lotes.map((l) => l.codigo));
+      expect(unicos.size, "sin códigos repetidos").toBe(lotes.length);
+    }
+  });
+
+  it("los lotes tienen una mezcla de estados: mayoría disponible, algunos separados y vendidos", async () => {
+    const proyectos = await filas("SELECT id, slug FROM proyectos");
+    for (const p of proyectos) {
+      const lotes = await filas("SELECT estado, count(*)::int AS n FROM lotes WHERE proyecto_id = $1 GROUP BY estado", [p.id]);
+      const n = Object.fromEntries(lotes.map((l) => [l.estado, l.n]));
+      const total = (n.disponible ?? 0) + (n.separado ?? 0) + (n.vendido ?? 0);
+      expect(n.disponible ?? 0, p.slug).toBeGreaterThan(total / 2);
+      expect(n.separado ?? 0, p.slug).toBeGreaterThanOrEqual(2);
+      expect(n.vendido ?? 0, p.slug).toBeGreaterThanOrEqual(2);
+    }
+  });
+
+  it("hay un lote disponible al precio desde de cada proyecto", async () => {
+    const proyectos = await filas("SELECT id, slug, precio_desde FROM proyectos");
+    for (const p of proyectos) {
+      const [{ n }] = await filas(
+        "SELECT count(*)::int AS n FROM lotes WHERE proyecto_id = $1 AND precio = $2 AND estado = 'disponible'",
+        [p.id, p.precio_desde],
+      );
+      expect(n, p.slug).toBeGreaterThanOrEqual(1);
+    }
+  });
+
+  it("el estado de un lote solo admite disponible, separado o vendido", async () => {
+    const [p] = await filas("SELECT id FROM proyectos LIMIT 1");
+    await expect(
+      pool.query(
+        `INSERT INTO lotes (proyecto_id, codigo, manzana, numero, area_m2, frente_m, fondo_m, precio, estado)
+         VALUES ($1, 'Mz. Z - Lt. 99', 'Z', 99, 100, 10, 10, 1000, 'regalado')`,
+        [p.id],
+      ),
+    ).rejects.toThrow();
+  });
+
+  it("el interés de un lead puede guardar el lote que le interesó", async () => {
+    const r = await filas(
+      "SELECT column_name FROM information_schema.columns WHERE table_name = 'lead_intereses' AND column_name = 'lote'",
+    );
+    expect(r).toHaveLength(1);
   });
 
   it("cada proyecto tiene al menos 6 preguntas frecuentes con palabras clave", async () => {

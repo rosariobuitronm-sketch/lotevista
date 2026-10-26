@@ -36,9 +36,9 @@ const detalle: ProyectoDetalle = {
   modeloLicencia: null,
   modeloFuente: null,
   lotes: [
-    { codigo: "A-01", areaM2: 120, frenteM: 8, fondoM: 15, precio: 37200 },
-    { codigo: "D-08", areaM2: 200, frenteM: 10, fondoM: 20, precio: 62000 },
-    { codigo: "B-05", areaM2: 144, frenteM: 9, fondoM: 16, precio: 44640 },
+    { codigo: "Mz. A - Lt. 1", manzana: "A", numero: 1, estado: "disponible", areaM2: 120, frenteM: 8, fondoM: 15, precio: 37200 },
+    { codigo: "Mz. C - Lt. 2", manzana: "C", numero: 2, estado: "vendido", areaM2: 200, frenteM: 10, fondoM: 20, precio: 62000 },
+    { codigo: "Mz. B - Lt. 1", manzana: "B", numero: 1, estado: "separado", areaM2: 144, frenteM: 9, fondoM: 16, precio: 44640 },
   ],
   faq: [],
 };
@@ -55,12 +55,12 @@ describe("FichaProyecto", () => {
 
   it("muestra los lotes referenciales con área, frente, fondo y precio", () => {
     render(<FichaProyecto proyecto={detalle} />);
-    const tabla = screen.getByRole("table", { name: /Lotes referenciales/ });
-    const filas = within(tabla).getAllByRole("row");
+    const tabla = screen.getByRole("table", { name: /Lotes referenciales/, hidden: true });
+    const filas = within(tabla).getAllByRole("row", { hidden: true });
     expect(filas).toHaveLength(4); // encabezado + 3 lotes
-    const primera = within(filas[1]).getAllByRole("cell").map((c) => c.textContent);
-    expect(primera).toEqual(["A-01", "120 m²", "8 m", "15 m", "S/ 37,200"]);
-    expect(within(tabla).getByText("S/ 62,000")).toBeInTheDocument();
+    const primera = within(filas[1]).getAllByRole("cell", { hidden: true }).map((c) => c.textContent);
+    expect(primera).toEqual(["Mz. A - Lt. 1", "120 m²", "8 m", "15 m", "S/ 37,200", "Disponible"]);
+    expect(within(tabla).getByText("S/ 62,000", { ignore: "script" })).toBeInTheDocument();
   });
 
   it("muestra el financiamiento y la entrega solo como texto", () => {
@@ -69,12 +69,30 @@ describe("FichaProyecto", () => {
     expect(screen.getByText(/Posesión inmediata/)).toBeInTheDocument();
   });
 
-  it("no tiene simulador de cuotas, plano ni estado de venta", () => {
+  it("no tiene simulador de cuotas ni cronograma de pagos (el financiamiento es solo texto)", () => {
     const { container } = render(<FichaProyecto proyecto={detalle} />);
-    const texto = container.textContent ?? "";
-    expect(texto).not.toMatch(/simulador|plano de lotes|cronograma/i);
-    expect(texto).not.toMatch(/\b(disponible|separado|vendido|reservado)\b/i);
+    expect(container.textContent ?? "").not.toMatch(/simulador|cronograma/i);
     expect(screen.queryByRole("slider")).not.toBeInTheDocument();
+  });
+
+  it("muestra el plano de lotización referencial, con leyenda y el aviso de que no está a escala", () => {
+    render(<FichaProyecto proyecto={detalle} />);
+    expect(screen.getByRole("heading", { level: 2, name: "Plano de lotización" })).toBeInTheDocument();
+    expect(screen.getByText("Plano referencial, no a escala")).toBeVisible();
+    expect(screen.getByRole("list", { name: "Leyenda del plano" })).toBeInTheDocument();
+  });
+
+  it("ofrece la lista de lotes en una tabla como alternativa accesible al plano", () => {
+    const { container } = render(<FichaProyecto proyecto={detalle} />);
+    expect(container.querySelector("details > summary")).toHaveTextContent("Ver la lista de lotes en una tabla (3 lotes)");
+  });
+
+  it("tiene los destinos de los botones del plano (visor 3D y contacto), sin ids repetidos", () => {
+    const { container } = render(<FichaProyecto proyecto={detalle} />);
+    expect(container.querySelector("#visor3d")).not.toBeNull();
+    expect(container.querySelector("#contacto")).not.toBeNull();
+    const ids = [...container.querySelectorAll("[id]")].map((e) => e.id);
+    expect(new Set(ids).size, "ids repetidos: " + ids.join(",")).toBe(ids.length);
   });
 
   it("aclara que se vende solo el lote y las medidas son referenciales", () => {

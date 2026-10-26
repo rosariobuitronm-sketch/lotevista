@@ -73,6 +73,7 @@ function TarjetaLead({ lead }: { lead: LeadPanel }) {
               <Insignia>{CANALES[i.canal] ?? i.canal}</Insignia>
               {i.uso3d && <Insignia tono="arena">Usó 3D</Insignia>}
               {i.usoRa && <Insignia tono="arena">Usó RA</Insignia>}
+              {i.lote && <Insignia tono="arena">{`Lote ${i.lote}`}</Insignia>}
               <span className="text-texto/70">{formatearFechaHora(i.fecha)}</span>
             </li>
           ))}

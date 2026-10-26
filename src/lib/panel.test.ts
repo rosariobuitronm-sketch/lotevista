@@ -18,6 +18,7 @@ const lead = (extra: Partial<DatosLead>): DatosLead => ({
   celular: "910020000",
   correo: "l@example.com",
   horario: undefined,
+  lote: undefined,
   consentimiento: true,
   proyecto: "algarrobos-de-sunampe",
   uso3d: false,
@@ -53,7 +54,7 @@ describe.skipIf(!urlPrueba)("datos del panel de leads (rama de pruebas)", () => 
       "holograma",
     );
     // Ana vuelve a escribir por otro proyecto: pasa a ser la más reciente y tiene 2 intereses
-    await guardar(lead({ nombre: "Ana Antigua", celular: "910020001", proyecto: "jardines-del-chira" }), minutos(60));
+    await guardar(lead({ nombre: "Ana Antigua", celular: "910020001", proyecto: "jardines-del-chira", lote: "Mz. B - Lt. 3" }), minutos(60));
   });
 
   afterAll(async () => {
@@ -76,7 +77,8 @@ describe.skipIf(!urlPrueba)("datos del panel de leads (rama de pruebas)", () => 
       ["jardines-del-chira", "web", false, false],
       ["algarrobos-de-sunampe", "qr_sala", true, false],
     ]);
-    expect(beto.intereses).toEqual([expect.objectContaining({ slug: "campina-de-huaral", canal: "holograma", usoRa: true })]);
+    expect(beto.intereses).toEqual([expect.objectContaining({ slug: "campina-de-huaral", canal: "holograma", usoRa: true, lote: null })]);
+    expect(ana.intereses[0].lote).toBe("Mz. B - Lt. 3"); // el lote que eligió en el plano
     expect(typeof beto.intereses[0].fecha).toBe("string");
   });
 

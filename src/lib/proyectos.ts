@@ -26,8 +26,15 @@ export type Proyecto = {
   modeloFuente: string | null;
 };
 
+export type EstadoLote = "disponible" | "separado" | "vendido";
+
 export type Lote = {
+  /** Texto del plano, por ejemplo "Mz. A - Lt. 5". */
   codigo: string;
+  manzana: string;
+  numero: number;
+  /** Estado referencial de demostración (no es disponibilidad en tiempo real). */
+  estado: EstadoLote;
   areaM2: number;
   frenteM: number;
   fondoM: number;
@@ -80,8 +87,8 @@ export async function obtenerProyecto(slug: string, sql: Sql = getSql()): Promis
   if (!fila) return null;
 
   const [lotes, faq] = await Promise.all([
-    sql`SELECT codigo, area_m2, frente_m, fondo_m, precio FROM lotes
-        WHERE proyecto_id = ${fila.id} ORDER BY area_m2, codigo`,
+    sql`SELECT codigo, manzana, numero, estado, area_m2, frente_m, fondo_m, precio FROM lotes
+        WHERE proyecto_id = ${fila.id} ORDER BY manzana, numero`,
     sql`SELECT pregunta, respuesta, palabras_clave FROM faq WHERE proyecto_id = ${fila.id} ORDER BY id`,
   ]);
 
@@ -89,6 +96,9 @@ export async function obtenerProyecto(slug: string, sql: Sql = getSql()): Promis
     ...aProyecto(fila),
     lotes: lotes.map((l) => ({
       codigo: l.codigo,
+      manzana: l.manzana,
+      numero: Number(l.numero),
+      estado: l.estado,
       areaM2: Number(l.area_m2),
       frenteM: Number(l.frente_m),
       fondoM: Number(l.fondo_m),

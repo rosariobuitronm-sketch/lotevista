@@ -17,8 +17,8 @@ const lead = (extra: Partial<LeadPanel> = {}): LeadPanel => ({
   creadoEn: "2026-10-20T15:00:00.000Z",
   ultimoContacto: "2026-10-21T20:30:00.000Z",
   intereses: [
-    { proyecto: "Algarrobos de Sunampe", slug: "algarrobos-de-sunampe", canal: "qr_sala", uso3d: true, usoRa: false, fecha: "2026-10-20T15:00:00.000Z" },
-    { proyecto: "Campiña de Huaral", slug: "campina-de-huaral", canal: "holograma", uso3d: false, usoRa: true, fecha: "2026-10-21T20:30:00.000Z" },
+    { proyecto: "Algarrobos de Sunampe", slug: "algarrobos-de-sunampe", canal: "qr_sala", uso3d: true, usoRa: false, lote: "Mz. A - Lt. 5", fecha: "2026-10-20T15:00:00.000Z" },
+    { proyecto: "Campiña de Huaral", slug: "campina-de-huaral", canal: "holograma", uso3d: false, usoRa: true, lote: null, fecha: "2026-10-21T20:30:00.000Z" },
   ],
   preguntas: [
     { proyecto: "Algarrobos de Sunampe", pregunta: "¿Hay agua?", respuesta: "Sí, agua potable.", sabe: true, fecha: "2026-10-20T15:00:00.000Z" },
@@ -64,6 +64,13 @@ describe("ListaLeads", () => {
     expect(filas[0]).toHaveTextContent("Usó 3D");
     expect(filas[1]).toHaveTextContent("Holograma");
     expect(filas[1]).toHaveTextContent("Usó RA");
+  });
+
+  it("muestra el lote del plano por el que preguntó, si lo eligió", () => {
+    render(<ListaLeads leads={[lead()]} proyectos={proyectos} proyectoActual={undefined} />);
+    const filas = within(screen.getByRole("list", { name: /Historial de proyectos/ })).getAllByRole("listitem");
+    expect(filas[0]).toHaveTextContent("Lote Mz. A - Lt. 5");
+    expect(filas[1]).not.toHaveTextContent("Lote");
   });
 
   it("muestra las preguntas al asistente y marca las que se derivaron a un asesor", () => {

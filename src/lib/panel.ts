@@ -10,6 +10,8 @@ export type InteresPanel = {
   canal: CanalOrigen;
   uso3d: boolean;
   usoRa: boolean;
+  /** Lote del plano por el que preguntó, si lo eligió. */
+  lote: string | null;
   fecha: string;
 };
 
@@ -44,7 +46,7 @@ export async function listarLeads(sql: Sql, opciones: { proyecto?: string } = {}
       COALESCE((
         SELECT json_agg(json_build_object(
                  'proyecto', p.nombre, 'slug', p.slug, 'canal', i.canal_origen,
-                 'uso3d', i.uso_3d, 'usoRa', i.uso_ra, 'fecha', i.creado_en) ORDER BY i.creado_en DESC, i.id DESC)
+                 'uso3d', i.uso_3d, 'usoRa', i.uso_ra, 'lote', i.lote, 'fecha', i.creado_en) ORDER BY i.creado_en DESC, i.id DESC)
         FROM lead_intereses i JOIN proyectos p ON p.id = i.proyecto_id
         WHERE i.lead_id = l.id), '[]'::json) AS intereses,
       COALESCE((

@@ -63,6 +63,19 @@ describe("validarLead: datos correctos", () => {
   });
 });
 
+describe("validarLead: lote de interés (del plano)", () => {
+  it("es opcional, se limpia y no puede ser enorme ni de otro tipo", () => {
+    const sin = validarLead(valido);
+    expect(sin.ok && sin.datos.lote).toBeUndefined();
+    const con = validarLead({ ...valido, lote: "  Mz. A - Lt. 5 " });
+    expect(con.ok && con.datos.lote).toBe("Mz. A - Lt. 5");
+    const vacio = validarLead({ ...valido, lote: "" });
+    expect(vacio.ok && vacio.datos.lote).toBeUndefined();
+    expect(errores({ ...valido, lote: "x".repeat(41) }).lote).toBeDefined();
+    expect(errores({ ...valido, lote: 5 }).lote).toBeDefined();
+  });
+});
+
 describe("validarLead: consentimiento (Ley 29733)", () => {
   it("sin consentimiento aceptado la validación siempre falla", () => {
     for (const consentimiento of [false, undefined, null, "true", "on", 1, 0, "", [], {}]) {

@@ -102,7 +102,8 @@ Nota de implementación: la etiqueta visible sobre la casa lleva siempre el text
 - [x] No hay simulador de cuotas, plano ni estado de venta.
 - [x] La ficha carga en menos de 3 s con 4G (se mide ya desplegada).
 
-> **Nota:** Medido en https://lotevista.vercel.app con Edge, sin caché y 4G simulado (10 cargas): carga p95 = 0.73 s, LCP p95 = 1.2 s. Con 4G lento (1.6 Mbps): p95 = 1.6 s. Cumple el límite de 3 s.
+
+> **Nota:** Medido en https://lotevista.vercel.app con Edge, sin caché y 4G simulado (10 cargas): carga p95 = 0.73 s, LCP p95 = 1.2 s. Con 4G lento (1.6 Mbps): p95 = 1.6 s. Cumple el límite de 3 s. **Requisito adicional posterior:** la ficha ahora incluye un plano de lotización referencial (22 lotes con estados de demostración); por eso el criterio «sin plano ni estado de venta» fue reemplazado por ese pedido. Sigue sin haber simulador de cuotas.
 
 ### 6 — Visor 3D + etiqueta "Imagen referencial" ✅
 

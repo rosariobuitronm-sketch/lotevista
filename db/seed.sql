@@ -32,18 +32,40 @@ ON CONFLICT (slug) DO UPDATE SET
   servicios = EXCLUDED.servicios, habilitacion_urbana = EXCLUDED.habilitacion_urbana,
   financiamiento = EXCLUDED.financiamiento, entrega = EXCLUDED.entrega;
 
--- <!-- REVISAR --> códigos de lote, medidas y precios inventados (área = frente x fondo)
-INSERT INTO lotes (proyecto_id, codigo, area_m2, frente_m, fondo_m, precio)
-SELECT p.id, v.codigo, v.area, v.frente, v.fondo, v.precio
+-- <!-- REVISAR --> 22 lotes por proyecto (Mz. A, B y C): medidas, precios y estados inventados (área = frente x fondo).
+-- Los estados son referenciales, de demostración: no hay disponibilidad en tiempo real. Esquina: +5 % sobre S/ 310 por m².
+DELETE FROM lotes WHERE proyecto_id = (SELECT id FROM proyectos WHERE slug = 'algarrobos-de-sunampe');
+INSERT INTO lotes (proyecto_id, codigo, manzana, numero, area_m2, frente_m, fondo_m, precio, estado)
+SELECT p.id, v.codigo, v.manzana, v.numero, v.area, v.frente, v.fondo, v.precio, v.estado
 FROM proyectos p,
-     (VALUES ('A-01', 120, 8, 15, 37200),
-             ('A-07', 120, 8, 15, 37200),
-             ('B-05', 144, 9, 16, 44640),
-             ('C-03', 150, 10, 15, 46500),
-             ('D-08', 200, 10, 20, 62000)) AS v(codigo, area, frente, fondo, precio)
+     (VALUES
+             ('Mz. A - Lt. 1', 'A', 1, 144, 9, 16, 46870, 'disponible'),
+             ('Mz. A - Lt. 2', 'A', 2, 120, 8, 15, 37200, 'disponible'),
+             ('Mz. A - Lt. 3', 'A', 3, 120, 8, 15, 37200, 'vendido'),
+             ('Mz. A - Lt. 4', 'A', 4, 150, 10, 15, 48830, 'disponible'),
+             ('Mz. A - Lt. 5', 'A', 5, 200, 10, 20, 65100, 'disponible'),
+             ('Mz. A - Lt. 6', 'A', 6, 120, 8, 15, 37200, 'separado'),
+             ('Mz. A - Lt. 7', 'A', 7, 135, 9, 15, 41850, 'disponible'),
+             ('Mz. A - Lt. 8', 'A', 8, 180, 10, 18, 58590, 'disponible'),
+             ('Mz. B - Lt. 1', 'B', 1, 150, 10, 15, 48830, 'vendido'),
+             ('Mz. B - Lt. 2', 'B', 2, 144, 9, 16, 44640, 'disponible'),
+             ('Mz. B - Lt. 3', 'B', 3, 120, 8, 15, 37200, 'separado'),
+             ('Mz. B - Lt. 4', 'B', 4, 135, 9, 15, 43940, 'disponible'),
+             ('Mz. B - Lt. 5', 'B', 5, 160, 10, 16, 52080, 'vendido'),
+             ('Mz. B - Lt. 6', 'B', 6, 128, 8, 16, 39680, 'disponible'),
+             ('Mz. B - Lt. 7', 'B', 7, 120, 8, 15, 37200, 'disponible'),
+             ('Mz. B - Lt. 8', 'B', 8, 180, 12, 15, 58590, 'disponible'),
+             ('Mz. C - Lt. 1', 'C', 1, 180, 10, 18, 58590, 'disponible'),
+             ('Mz. C - Lt. 2', 'C', 2, 144, 9, 16, 44640, 'vendido'),
+             ('Mz. C - Lt. 3', 'C', 3, 150, 10, 15, 48830, 'disponible'),
+             ('Mz. C - Lt. 4', 'C', 4, 200, 10, 20, 65100, 'separado'),
+             ('Mz. C - Lt. 5', 'C', 5, 120, 8, 15, 37200, 'disponible'),
+             ('Mz. C - Lt. 6', 'C', 6, 135, 9, 15, 43940, 'disponible')
+     ) AS v(codigo, manzana, numero, area, frente, fondo, precio, estado)
 WHERE p.slug = 'algarrobos-de-sunampe'
 ON CONFLICT (proyecto_id, codigo) DO UPDATE SET
-  area_m2 = EXCLUDED.area_m2, frente_m = EXCLUDED.frente_m, fondo_m = EXCLUDED.fondo_m, precio = EXCLUDED.precio;
+  manzana = EXCLUDED.manzana, numero = EXCLUDED.numero, area_m2 = EXCLUDED.area_m2, frente_m = EXCLUDED.frente_m,
+  fondo_m = EXCLUDED.fondo_m, precio = EXCLUDED.precio, estado = EXCLUDED.estado;
 
 -- <!-- REVISAR --> respuestas de FAQ: salen de los datos de arriba, pero hay que validarlas
 INSERT INTO faq (proyecto_id, pregunta, respuesta, palabras_clave)
@@ -107,18 +129,40 @@ ON CONFLICT (slug) DO UPDATE SET
   servicios = EXCLUDED.servicios, habilitacion_urbana = EXCLUDED.habilitacion_urbana,
   financiamiento = EXCLUDED.financiamiento, entrega = EXCLUDED.entrega;
 
--- <!-- REVISAR --> códigos de lote, medidas y precios inventados (área = frente x fondo)
-INSERT INTO lotes (proyecto_id, codigo, area_m2, frente_m, fondo_m, precio)
-SELECT p.id, v.codigo, v.area, v.frente, v.fondo, v.precio
+-- <!-- REVISAR --> 22 lotes por proyecto (Mz. A, B y C): medidas, precios y estados inventados (área = frente x fondo).
+-- Los estados son referenciales, de demostración: no hay disponibilidad en tiempo real. Esquina: +5 % sobre S/ 480 por m².
+DELETE FROM lotes WHERE proyecto_id = (SELECT id FROM proyectos WHERE slug = 'campina-de-huaral');
+INSERT INTO lotes (proyecto_id, codigo, manzana, numero, area_m2, frente_m, fondo_m, precio, estado)
+SELECT p.id, v.codigo, v.manzana, v.numero, v.area, v.frente, v.fondo, v.precio, v.estado
 FROM proyectos p,
-     (VALUES ('A-01', 90, 6, 15, 43200),
-             ('A-09', 105, 7, 15, 50400),
-             ('B-04', 120, 8, 15, 57600),
-             ('C-02', 160, 8, 20, 76800),
-             ('D-06', 200, 10, 20, 96000)) AS v(codigo, area, frente, fondo, precio)
+     (VALUES
+             ('Mz. A - Lt. 1', 'A', 1, 105, 7, 15, 52920, 'disponible'),
+             ('Mz. A - Lt. 2', 'A', 2, 90, 6, 15, 43200, 'disponible'),
+             ('Mz. A - Lt. 3', 'A', 3, 90, 6, 15, 43200, 'vendido'),
+             ('Mz. A - Lt. 4', 'A', 4, 120, 8, 15, 60480, 'disponible'),
+             ('Mz. A - Lt. 5', 'A', 5, 135, 9, 15, 68040, 'disponible'),
+             ('Mz. A - Lt. 6', 'A', 6, 105, 7, 15, 50400, 'separado'),
+             ('Mz. A - Lt. 7', 'A', 7, 144, 8, 18, 69120, 'disponible'),
+             ('Mz. A - Lt. 8', 'A', 8, 160, 10, 16, 80640, 'disponible'),
+             ('Mz. B - Lt. 1', 'B', 1, 120, 8, 15, 60480, 'vendido'),
+             ('Mz. B - Lt. 2', 'B', 2, 105, 7, 15, 50400, 'disponible'),
+             ('Mz. B - Lt. 3', 'B', 3, 90, 6, 15, 43200, 'separado'),
+             ('Mz. B - Lt. 4', 'B', 4, 180, 9, 20, 90720, 'disponible'),
+             ('Mz. B - Lt. 5', 'B', 5, 200, 10, 20, 100800, 'vendido'),
+             ('Mz. B - Lt. 6', 'B', 6, 160, 8, 20, 76800, 'disponible'),
+             ('Mz. B - Lt. 7', 'B', 7, 126, 7, 18, 60480, 'disponible'),
+             ('Mz. B - Lt. 8', 'B', 8, 135, 9, 15, 68040, 'disponible'),
+             ('Mz. C - Lt. 1', 'C', 1, 144, 8, 18, 72580, 'disponible'),
+             ('Mz. C - Lt. 2', 'C', 2, 144, 9, 16, 69120, 'vendido'),
+             ('Mz. C - Lt. 3', 'C', 3, 105, 7, 15, 52920, 'disponible'),
+             ('Mz. C - Lt. 4', 'C', 4, 200, 10, 20, 100800, 'separado'),
+             ('Mz. C - Lt. 5', 'C', 5, 120, 8, 15, 57600, 'disponible'),
+             ('Mz. C - Lt. 6', 'C', 6, 105, 7, 15, 52920, 'disponible')
+     ) AS v(codigo, manzana, numero, area, frente, fondo, precio, estado)
 WHERE p.slug = 'campina-de-huaral'
 ON CONFLICT (proyecto_id, codigo) DO UPDATE SET
-  area_m2 = EXCLUDED.area_m2, frente_m = EXCLUDED.frente_m, fondo_m = EXCLUDED.fondo_m, precio = EXCLUDED.precio;
+  manzana = EXCLUDED.manzana, numero = EXCLUDED.numero, area_m2 = EXCLUDED.area_m2, frente_m = EXCLUDED.frente_m,
+  fondo_m = EXCLUDED.fondo_m, precio = EXCLUDED.precio, estado = EXCLUDED.estado;
 
 -- <!-- REVISAR --> respuestas de FAQ: salen de los datos de arriba, pero hay que validarlas
 INSERT INTO faq (proyecto_id, pregunta, respuesta, palabras_clave)
@@ -182,18 +226,40 @@ ON CONFLICT (slug) DO UPDATE SET
   servicios = EXCLUDED.servicios, habilitacion_urbana = EXCLUDED.habilitacion_urbana,
   financiamiento = EXCLUDED.financiamiento, entrega = EXCLUDED.entrega;
 
--- <!-- REVISAR --> códigos de lote, medidas y precios inventados (área = frente x fondo)
-INSERT INTO lotes (proyecto_id, codigo, area_m2, frente_m, fondo_m, precio)
-SELECT p.id, v.codigo, v.area, v.frente, v.fondo, v.precio
+-- <!-- REVISAR --> 22 lotes por proyecto (Mz. A, B y C): medidas, precios y estados inventados (área = frente x fondo).
+-- Los estados son referenciales, de demostración: no hay disponibilidad en tiempo real. Esquina: +5 % sobre S/ 420 por m².
+DELETE FROM lotes WHERE proyecto_id = (SELECT id FROM proyectos WHERE slug = 'jardines-del-chira');
+INSERT INTO lotes (proyecto_id, codigo, manzana, numero, area_m2, frente_m, fondo_m, precio, estado)
+SELECT p.id, v.codigo, v.manzana, v.numero, v.area, v.frente, v.fondo, v.precio, v.estado
 FROM proyectos p,
-     (VALUES ('A-03', 100, 10, 10, 42000),
-             ('B-01', 120, 8, 15, 50400),
-             ('B-10', 150, 10, 15, 63000),
-             ('C-05', 180, 9, 20, 75600),
-             ('D-02', 200, 10, 20, 84000)) AS v(codigo, area, frente, fondo, precio)
+     (VALUES
+             ('Mz. A - Lt. 1', 'A', 1, 100, 10, 10, 44100, 'disponible'),
+             ('Mz. A - Lt. 2', 'A', 2, 100, 10, 10, 42000, 'disponible'),
+             ('Mz. A - Lt. 3', 'A', 3, 120, 8, 15, 50400, 'vendido'),
+             ('Mz. A - Lt. 4', 'A', 4, 150, 10, 15, 66150, 'disponible'),
+             ('Mz. A - Lt. 5', 'A', 5, 180, 9, 20, 79380, 'disponible'),
+             ('Mz. A - Lt. 6', 'A', 6, 135, 9, 15, 56700, 'separado'),
+             ('Mz. A - Lt. 7', 'A', 7, 140, 10, 14, 58800, 'disponible'),
+             ('Mz. A - Lt. 8', 'A', 8, 120, 10, 12, 52920, 'disponible'),
+             ('Mz. B - Lt. 1', 'B', 1, 126, 9, 14, 55570, 'vendido'),
+             ('Mz. B - Lt. 2', 'B', 2, 112, 8, 14, 47040, 'disponible'),
+             ('Mz. B - Lt. 3', 'B', 3, 150, 10, 15, 63000, 'separado'),
+             ('Mz. B - Lt. 4', 'B', 4, 200, 10, 20, 88200, 'disponible'),
+             ('Mz. B - Lt. 5', 'B', 5, 120, 8, 15, 52920, 'vendido'),
+             ('Mz. B - Lt. 6', 'B', 6, 180, 9, 20, 75600, 'disponible'),
+             ('Mz. B - Lt. 7', 'B', 7, 140, 10, 14, 58800, 'disponible'),
+             ('Mz. B - Lt. 8', 'B', 8, 112, 8, 14, 49390, 'disponible'),
+             ('Mz. C - Lt. 1', 'C', 1, 150, 10, 15, 66150, 'disponible'),
+             ('Mz. C - Lt. 2', 'C', 2, 135, 9, 15, 56700, 'vendido'),
+             ('Mz. C - Lt. 3', 'C', 3, 120, 10, 12, 52920, 'disponible'),
+             ('Mz. C - Lt. 4', 'C', 4, 200, 10, 20, 88200, 'separado'),
+             ('Mz. C - Lt. 5', 'C', 5, 120, 8, 15, 50400, 'disponible'),
+             ('Mz. C - Lt. 6', 'C', 6, 126, 9, 14, 55570, 'disponible')
+     ) AS v(codigo, manzana, numero, area, frente, fondo, precio, estado)
 WHERE p.slug = 'jardines-del-chira'
 ON CONFLICT (proyecto_id, codigo) DO UPDATE SET
-  area_m2 = EXCLUDED.area_m2, frente_m = EXCLUDED.frente_m, fondo_m = EXCLUDED.fondo_m, precio = EXCLUDED.precio;
+  manzana = EXCLUDED.manzana, numero = EXCLUDED.numero, area_m2 = EXCLUDED.area_m2, frente_m = EXCLUDED.frente_m,
+  fondo_m = EXCLUDED.fondo_m, precio = EXCLUDED.precio, estado = EXCLUDED.estado;
 
 -- <!-- REVISAR --> respuestas de FAQ: salen de los datos de arriba, pero hay que validarlas
 INSERT INTO faq (proyecto_id, pregunta, respuesta, palabras_clave)

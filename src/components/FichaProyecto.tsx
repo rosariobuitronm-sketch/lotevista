@@ -1,9 +1,14 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { CasaSobreLote } from "@/components/CasaSobreLote";
+import { ProveedorLote } from "@/components/ContextoLote";
 import { FormularioInteres } from "@/components/FormularioInteres";
+import { PlanoLotes } from "@/components/PlanoLotes";
 import { VisorCasa } from "@/components/VisorCasa";
 import { formatearArea, formatearMetros, formatearRangoArea, formatearSoles } from "@/lib/formato";
-import { obtenerProyecto, type ProyectoDetalle } from "@/lib/proyectos";
+import { obtenerProyecto, type EstadoLote, type ProyectoDetalle } from "@/lib/proyectos";
+
+const ESTADO: Record<EstadoLote, string> = { disponible: "Disponible", separado: "Separado", vendido: "Vendido" };
 
 function Dato({ titulo, children }: { titulo: string; children: React.ReactNode }) {
   return (
@@ -17,6 +22,7 @@ function Dato({ titulo, children }: { titulo: string; children: React.ReactNode 
 export function FichaProyecto({ proyecto }: { proyecto: ProyectoDetalle }) {
   const ubicacion = `${proyecto.distrito}, ${proyecto.provincia}, ${proyecto.departamento}`;
   return (
+    <ProveedorLote>
     <article className="space-y-8">
       <title>{`${proyecto.nombre} · LoteVista`}</title>
       <div>
@@ -28,8 +34,9 @@ export function FichaProyecto({ proyecto }: { proyecto: ProyectoDetalle }) {
       </div>
 
       <div className="grid gap-8 lg:grid-cols-2">
-        <section aria-label="Casa referencial">
+        <section id="visor3d" aria-label="Casa referencial" className="scroll-mt-4 space-y-3">
           <VisorCasa nombre={proyecto.nombre} modeloUrl={proyecto.modeloArchivo} imagenUrl={proyecto.imagenUrl} />
+          <CasaSobreLote />
         </section>
 
         <section aria-labelledby="resumen" className="space-y-4">
@@ -52,40 +59,49 @@ export function FichaProyecto({ proyecto }: { proyecto: ProyectoDetalle }) {
         </section>
       </div>
 
-      <section aria-labelledby="lotes">
-        <h2 id="lotes" className="text-2xl font-bold text-marino">
-          Lotes referenciales
-        </h2>
-        <p className="mb-3 text-sm text-texto/80">
-          Se vende únicamente el lote. Las medidas y los precios son referenciales; un asesor te confirmará los datos
-          vigentes.
-        </p>
-        <div className="overflow-x-auto rounded-xl border border-marino/10 bg-white">
-          <table className="w-full min-w-[20rem] text-left text-sm sm:text-base">
-            <caption className="sr-only">Lotes referenciales de {proyecto.nombre}</caption>
-            <thead className="bg-celeste text-marino">
-              <tr>
-                <th scope="col" className="whitespace-nowrap px-2 py-2 sm:px-3 font-bold">Lote</th>
-                <th scope="col" className="whitespace-nowrap px-2 py-2 sm:px-3 font-bold">Área</th>
-                <th scope="col" className="whitespace-nowrap px-2 py-2 sm:px-3 font-bold">Frente</th>
-                <th scope="col" className="whitespace-nowrap px-2 py-2 sm:px-3 font-bold">Fondo</th>
-                <th scope="col" className="whitespace-nowrap px-2 py-2 sm:px-3 text-right font-bold">Precio</th>
-              </tr>
-            </thead>
-            <tbody>
-              {proyecto.lotes.map((l) => (
-                <tr key={l.codigo} className="border-t border-marino/10">
-                  <td className="whitespace-nowrap px-2 py-2 sm:px-3 font-semibold">{l.codigo}</td>
-                  <td className="whitespace-nowrap px-2 py-2 sm:px-3">{formatearArea(l.areaM2)}</td>
-                  <td className="whitespace-nowrap px-2 py-2 sm:px-3">{formatearMetros(l.frenteM)}</td>
-                  <td className="whitespace-nowrap px-2 py-2 sm:px-3">{formatearMetros(l.fondoM)}</td>
-                  <td className="whitespace-nowrap px-2 py-2 sm:px-3 text-right font-semibold text-marino">{formatearSoles(l.precio)}</td>
+      <PlanoLotes lotes={proyecto.lotes} nombreProyecto={proyecto.nombre} />
+
+      <details className="rounded-xl border border-marino/10 bg-white">
+        <summary className="cursor-pointer px-4 py-3 font-semibold text-marino">
+          {`Ver la lista de lotes en una tabla (${proyecto.lotes.length} lotes)`}
+        </summary>
+        <section aria-labelledby="lotes" className="space-y-2 px-4 pb-4">
+          <h2 id="lotes" className="text-xl font-bold text-marino">
+            Lotes referenciales
+          </h2>
+          <p className="text-sm text-texto/80">
+            Se vende únicamente el lote. Las medidas, los precios y los estados son referenciales; un asesor te confirmará
+            los datos vigentes.
+          </p>
+          <div className="overflow-x-auto rounded-xl border border-marino/10">
+            <table className="w-full min-w-[24rem] text-left text-sm sm:text-base">
+              <caption className="sr-only">Lotes referenciales de {proyecto.nombre}</caption>
+              <thead className="bg-celeste text-marino">
+                <tr>
+                  <th scope="col" className="whitespace-nowrap px-2 py-2 font-bold sm:px-3">Lote</th>
+                  <th scope="col" className="whitespace-nowrap px-2 py-2 font-bold sm:px-3">Área</th>
+                  <th scope="col" className="whitespace-nowrap px-2 py-2 font-bold sm:px-3">Frente</th>
+                  <th scope="col" className="whitespace-nowrap px-2 py-2 font-bold sm:px-3">Fondo</th>
+                  <th scope="col" className="whitespace-nowrap px-2 py-2 text-right font-bold sm:px-3">Precio</th>
+                  <th scope="col" className="whitespace-nowrap px-2 py-2 font-bold sm:px-3">Estado</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      </section>
+              </thead>
+              <tbody>
+                {proyecto.lotes.map((l) => (
+                  <tr key={l.codigo} className="border-t border-marino/10">
+                    <td className="whitespace-nowrap px-2 py-2 font-semibold sm:px-3">{l.codigo}</td>
+                    <td className="whitespace-nowrap px-2 py-2 sm:px-3">{formatearArea(l.areaM2)}</td>
+                    <td className="whitespace-nowrap px-2 py-2 sm:px-3">{formatearMetros(l.frenteM)}</td>
+                    <td className="whitespace-nowrap px-2 py-2 sm:px-3">{formatearMetros(l.fondoM)}</td>
+                    <td className="whitespace-nowrap px-2 py-2 text-right font-semibold text-marino sm:px-3">{formatearSoles(l.precio)}</td>
+                    <td className="whitespace-nowrap px-2 py-2 sm:px-3">{ESTADO[l.estado]}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </section>
+      </details>
 
       <section aria-labelledby="condiciones" className="grid gap-4 md:grid-cols-2">
         <h2 id="condiciones" className="sr-only">
@@ -100,13 +116,14 @@ export function FichaProyecto({ proyecto }: { proyecto: ProyectoDetalle }) {
           <p className="mt-1">{proyecto.entrega}</p>
         </div>
       </section>
-      <section aria-labelledby="contacto" id="contacto" className="max-w-2xl scroll-mt-4">
-        <h2 id="contacto" className="sr-only">
+      <section aria-labelledby="titulo-contacto" id="contacto" className="max-w-2xl scroll-mt-4">
+        <h2 id="titulo-contacto" className="sr-only">
           Contacto
         </h2>
         <FormularioInteres proyectoSlug={proyecto.slug} proyectoNombre={proyecto.nombre} />
       </section>
     </article>
+    </ProveedorLote>
   );
 }
 

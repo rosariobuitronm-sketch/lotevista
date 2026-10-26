@@ -23,6 +23,7 @@ const lead = (extra: Partial<DatosLead> = {}): DatosLead => ({
   celular: celularNuevo(),
   correo: "prueba@example.com",
   horario: undefined,
+  lote: undefined,
   consentimiento: true,
   proyecto: "algarrobos-de-sunampe",
   uso3d: false,
@@ -162,6 +163,25 @@ describe.skipIf(!urlPrueba)("guardar y actualizar leads (rama de pruebas)", () =
     expect(intereses).toEqual([{ uso_3d: true, uso_ra: true }]); // un solo interés, con las marcas sumadas
     const preguntas = await filas("SELECT pregunta FROM lead_preguntas WHERE lead_id = $1 ORDER BY id", [l.id]);
     expect(preguntas.map((p) => p.pregunta)).toEqual(["¿Hay agua?", "¿Y luz?"]); // sin duplicar la repetida
+  });
+
+  it("guarda el lote de interés; al fusionar lo conserva si no llega otro y lo reemplaza si llega uno nuevo", async () => {
+    const celular = celularNuevo();
+    const loteGuardado = async () =>
+      (await filas("SELECT i.lote FROM lead_intereses i JOIN leads l ON l.id = i.lead_id WHERE l.celular = $1", [celular]))[0].lote;
+    await guardarLead(pool, lead({ celular, lote: "Mz. A - Lt. 2" }), opciones());
+    expect(await loteGuardado()).toBe("Mz. A - Lt. 2");
+    await guardarLead(pool, lead({ celular }), opciones({ ahora: minutos(5) }));
+    expect(await loteGuardado()).toBe("Mz. A - Lt. 2");
+    await guardarLead(pool, lead({ celular, lote: "Mz. B - Lt. 1" }), opciones({ ahora: minutos(6) }));
+    expect(await loteGuardado()).toBe("Mz. B - Lt. 1");
+  });
+
+  it("un lead sin lote de interés se guarda igual (el lote es opcional)", async () => {
+    const datos = lead();
+    await guardarLead(pool, datos, opciones());
+    const [i] = await filas("SELECT i.lote FROM lead_intereses i JOIN leads l ON l.id = i.lead_id WHERE l.celular = $1", [datos.celular]);
+    expect(i.lote).toBeNull();
   });
 
   it("pasados 10 minutos, el mismo proyecto sí agrega otro interés", async () => {

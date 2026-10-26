@@ -68,14 +68,14 @@ export async function guardarLead(pool: Pool, datos: DatosLead, opciones: Opcion
     const fusionado = reciente.rows.length > 0;
     if (fusionado) {
       await cliente.query(
-        `UPDATE lead_intereses SET uso_3d = uso_3d OR $2, uso_ra = uso_ra OR $3 WHERE id = $1`,
-        [reciente.rows[0].id, datos.uso3d, datos.usoRa],
+        `UPDATE lead_intereses SET uso_3d = uso_3d OR $2, uso_ra = uso_ra OR $3, lote = COALESCE($4, lote) WHERE id = $1`,
+        [reciente.rows[0].id, datos.uso3d, datos.usoRa, datos.lote ?? null],
       );
     } else {
       await cliente.query(
-        `INSERT INTO lead_intereses (lead_id, proyecto_id, canal_origen, uso_3d, uso_ra, creado_en)
-         VALUES ($1, $2, $3, $4, $5, $6)`,
-        [leadId, proyectoId, opciones.canal, datos.uso3d, datos.usoRa, ahora],
+        `INSERT INTO lead_intereses (lead_id, proyecto_id, canal_origen, uso_3d, uso_ra, lote, creado_en)
+         VALUES ($1, $2, $3, $4, $5, $6, $7)`,
+        [leadId, proyectoId, opciones.canal, datos.uso3d, datos.usoRa, datos.lote ?? null, ahora],
       );
     }
 

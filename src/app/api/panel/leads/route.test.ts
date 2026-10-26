@@ -25,6 +25,7 @@ describe.skipIf(!urlPrueba)("GET /api/panel/leads (rama de pruebas)", () => {
         celular: "910030001",
         correo: "xss@example.com",
         horario: undefined,
+        lote: undefined,
         consentimiento: true,
         proyecto: "jardines-del-chira",
         uso3d: true,

@@ -1,7 +1,9 @@
 "use client";
 
 import { useRef, useState } from "react";
+import { useLote } from "@/components/ContextoLote";
 import { leerActividad } from "@/lib/actividad";
+import { formatearArea } from "@/lib/formato";
 import { validarLead } from "@/lib/lead-schema";
 import { CONSENTIMIENTO_TEXTO, NOMBRE_EMPRESA } from "@/lib/textos";
 
@@ -52,7 +54,8 @@ export function FormularioInteres({ proyectoSlug, proyectoNombre }: Props) {
   const [estado, setEstado] = useState<Estado>("editando");
   const [mensajeFallo, setMensajeFallo] = useState("");
   const [mensajeExito, setMensajeExito] = useState("");
-  const enviandoRef = useRef(false); // evita el doble envío aunque el segundo clic llegue antes de repintar
+  const enviandoRef = useRef(false);
+  const { loteInteres, elegirInteres } = useLote(); // lote elegido en el plano de lotización // evita el doble envío aunque el segundo clic llegue antes de repintar
 
   const cambiar = (campo: keyof typeof valores, valor: string | boolean) => setValores((v) => ({ ...v, [campo]: valor }));
   const describir = (id: string, campo: string) => (errores[campo] ? `${id}-error` : undefined);
@@ -67,6 +70,7 @@ export function FormularioInteres({ proyectoSlug, proyectoNombre }: Props) {
       celular: valores.celular,
       correo: valores.correo,
       horario: valores.horario || undefined,
+      lote: loteInteres?.codigo,
       consentimiento: valores.consentimiento,
       proyecto: proyectoSlug,
       uso3d: actividad.uso3d,
@@ -124,6 +128,19 @@ export function FormularioInteres({ proyectoSlug, proyectoNombre }: Props) {
         <h3 className="text-xl font-bold text-marino">Quiero más información</h3>
         <p className="text-sm text-texto/80">Déjanos tus datos y un asesor te contactará sobre {proyectoNombre}.</p>
       </div>
+
+      {loteInteres && (
+        <div className="flex flex-wrap items-center justify-between gap-2 rounded-lg bg-celeste p-3 text-sm text-marino">
+          <p className="font-semibold">{`Lote de interés: ${loteInteres.codigo} · ${formatearArea(loteInteres.areaM2)}`}</p>
+          <button
+            type="button"
+            onClick={() => elegirInteres(null)}
+            className="font-semibold text-azul underline underline-offset-2"
+          >
+            Quitar el lote de interés
+          </button>
+        </div>
+      )}
 
       <Campo id="nombre" etiqueta="Nombre completo" error={errores.nombre}>
         <input

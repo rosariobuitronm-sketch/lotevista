@@ -27,19 +27,29 @@ describe.skipIf(!urlPrueba)("datos de proyectos (rama de pruebas)", () => {
     const p = await obtenerProyecto("algarrobos-de-sunampe", sql());
     expect(p).not.toBeNull();
     expect(p!.nombre).toBe("Algarrobos de Sunampe");
-    expect(p!.lotes.length).toBeGreaterThanOrEqual(3);
+    expect(p!.lotes.length).toBe(22);
     expect(p!.lotes[0]).toEqual(
-      expect.objectContaining({ codigo: expect.any(String), areaM2: expect.any(Number), precio: expect.any(Number) }),
+      expect.objectContaining({
+        codigo: "Mz. A - Lt. 1",
+        manzana: "A",
+        numero: 1,
+        areaM2: expect.any(Number),
+        precio: expect.any(Number),
+        estado: expect.stringMatching(/^(disponible|separado|vendido)$/),
+      }),
     );
     expect(p!.faq.length).toBeGreaterThanOrEqual(6);
     expect(Array.isArray(p!.faq[0].palabrasClave)).toBe(true);
     expect(p!.modeloArchivo).toBe("/modelos/casa-sunampe.glb");
   });
 
-  it("los lotes vienen ordenados por área y luego por código", async () => {
+  it("los lotes vienen ordenados por manzana y número, como en el plano", async () => {
     const p = await obtenerProyecto("campina-de-huaral", sql());
-    const areas = p!.lotes.map((l) => l.areaM2);
-    expect(areas).toEqual([...areas].sort((a, b) => a - b));
+    const claves = p!.lotes.map((l) => [l.manzana, l.numero] as const);
+    const ordenadas = [...claves].sort((a, b) => a[0].localeCompare(b[0]) || a[1] - b[1]);
+    expect(claves).toEqual(ordenadas);
+    expect(p!.lotes[0].codigo).toBe("Mz. A - Lt. 1");
+    expect(p!.lotes.at(-1)!.codigo).toBe("Mz. C - Lt. 6");
   });
 
   it("un slug inexistente o raro devuelve null sin lanzar error", async () => {

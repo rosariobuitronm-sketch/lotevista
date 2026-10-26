@@ -51,6 +51,13 @@ export const leadSchema = z
       .max(60, "El horario no puede pasar de 60 caracteres.")
       .nullish()
       .transform((v) => v || undefined),
+    // Lote del plano por el que preguntó (opcional), por ejemplo "Mz. A - Lt. 5".
+    lote: z
+      .string()
+      .trim()
+      .max(40, "El lote no puede pasar de 40 caracteres.")
+      .nullish()
+      .transform((v) => v || undefined),
     consentimiento: z.literal(true, { error: MSG_CONSENTIMIENTO }),
     proyecto: z.string({ error: "Proyecto no válido." }).regex(/^[a-z0-9-]{1,80}$/, "Proyecto no válido."),
     uso3d: z.boolean().default(false),

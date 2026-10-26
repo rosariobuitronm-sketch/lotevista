@@ -106,3 +106,13 @@ CREATE INDEX IF NOT EXISTS idx_lead_intereses_lead     ON lead_intereses (lead_i
 CREATE INDEX IF NOT EXISTS idx_lead_intereses_proyecto ON lead_intereses (proyecto_id);
 CREATE INDEX IF NOT EXISTS idx_lead_preguntas_lead     ON lead_preguntas (lead_id);
 CREATE INDEX IF NOT EXISTS idx_leads_ultimo_contacto   ON leads (ultimo_contacto DESC);
+
+-- Plano de lotización: cada lote pertenece a una manzana, tiene número y un estado referencial de demostración
+-- (no es disponibilidad en tiempo real). "Mz. A - Lt. 5" = manzana A, lote 5.
+ALTER TABLE lotes ADD COLUMN IF NOT EXISTS manzana text;
+ALTER TABLE lotes ADD COLUMN IF NOT EXISTS numero integer;
+ALTER TABLE lotes ADD COLUMN IF NOT EXISTS estado text NOT NULL DEFAULT 'disponible'
+  CHECK (estado IN ('disponible', 'separado', 'vendido'));
+
+-- Lote por el que el cliente mostró interés al enviar el formulario (opcional).
+ALTER TABLE lead_intereses ADD COLUMN IF NOT EXISTS lote text;

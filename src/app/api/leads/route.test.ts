@@ -59,6 +59,12 @@ describe("POST /api/leads", () => {
     expect(fin).toHaveBeenCalledOnce(); // se cierra la conexión
   });
 
+  it("pasa el lote de interés del plano a guardarLead", async () => {
+    guardarLead.mockResolvedValue({ leadId: 1, nuevo: true, fusionado: false });
+    await pedir({ ...valido, lote: "Mz. C - Lt. 4" });
+    expect(guardarLead.mock.calls[0][1].lote).toBe("Mz. C - Lt. 4");
+  });
+
   it("responde igual aunque el celular ya existiera (no revela si la persona ya estaba registrada)", async () => {
     guardarLead.mockResolvedValueOnce({ leadId: 1, nuevo: true, fusionado: false });
     guardarLead.mockResolvedValueOnce({ leadId: 1, nuevo: false, fusionado: false });

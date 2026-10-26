@@ -36,3 +36,15 @@ Para subirlas, cuando vuelvas: `vercel env add AUTH_SECRET production` (y lo mis
 - **Mismo celular:** al repetirse, NO se pisan el nombre ni el correo originales (solo cambian último contacto y horario, como dice el ADR 0007).
 - **Celular válido:** 9 dígitos que empiezan con 9 (celulares de Perú); se acepta el prefijo +51.
 - **Pruebas locales de punta a punta:** mi servidor local usa la **rama de pruebas** de Neon, nunca la de producción, para no ensuciar los leads reales.
+
+### Plano de lotización (requisito nuevo, entre los ítems 12 y 13)
+
+- **Contradice una línea del PRD y del CLAUDE.md** ("no hay plano de lotes con disponibilidad en tiempo real"). Lo hice como pediste, pero **referencial**: el plano dice "Plano referencial, no a escala" y los estados son de demostración, no vienen de ningún sistema en tiempo real. Si quieres que el PRD quede coherente, hay que ajustar esa frase.
+- **22 lotes por proyecto:** Mz. A (8), Mz. B (8) y Mz. C (6). Los generé con un cálculo repetible: área = frente × fondo, tarifa por m² de cada proyecto (S/ 310 Sunampe, S/ 480 Huaral, S/ 420 Chira) y **+5 % en lotes de esquina**. Los precios "desde" y los rangos de metraje de los proyectos no cambiaron. **Todo está marcado como `<!-- REVISAR -->` en `db/seed.sql`.**
+- **Estados por proyecto:** 15 disponibles, 3 separados y 4 vendidos.
+- **Separado:** se puede tocar y muestra un aviso ("separado por otro cliente"); **vendido:** no es clicable ni recibe el foco, pero el lector de pantalla lo describe.
+- **"Ver casa 3D en este lote":** el modelo 3D es el mismo para todos los lotes. El botón lleva al visor y muestra "Mostrando la casa referencial sobre el lote Mz. X - Lt. N…". No se coloca la casa físicamente sobre el lote.
+- **"Quiero información"** precarga el lote en el formulario (con opción de quitarlo) y **se guarda en el lead** (columna nueva `lead_intereses.lote`) y se ve en el panel del asesor. Esto lo agregué yo porque, si no, el dato se perdía.
+- **Accesibilidad:** cada lote es un botón con nombre completo ("Mz. A - Lt. 1, 144 m², 9 m de frente por 16 m de fondo, S/ 46,870, disponible"), Tab/Enter/Espacio/Escape, foco que pasa al panel, y además de color cada estado lleva un patrón (rayas = vendido, puntos = separado) para quien no distingue colores. La tabla completa de lotes queda en un desplegable como alternativa.
+- **Cambio de esquema pendiente en producción:** columnas nuevas `lotes.manzana`, `lotes.numero`, `lotes.estado` y `lead_intereses.lote` (con `ALTER TABLE … IF NOT EXISTS`, repetible y sin borrar nada) + el seed con los 66 lotes. **Hay que aplicarlos en producción ANTES de subir el código del plano** (`npm run db:produccion`); si no, la ficha fallaría. Te lo pediré junto con el siguiente push.
+- Corregí un error mío anterior: el título y la sección de contacto repetían el mismo `id`.
