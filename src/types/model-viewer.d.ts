@@ -16,6 +16,9 @@ declare module "react" {
         "environment-image"?: string;
         exposure?: string;
         "camera-orbit"?: string;
+        "min-camera-orbit"?: string;
+        "max-camera-orbit"?: string;
+        "field-of-view"?: string;
         "interaction-prompt"?: string;
         "rotation-per-second"?: string;
         "disable-zoom"?: boolean | "";

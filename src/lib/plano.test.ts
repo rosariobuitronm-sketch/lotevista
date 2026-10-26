@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { contarPorEstado, descripcionLote, distribuirLotes, MANZANAS_PLANO, VISTA_PLANO } from "@/lib/plano";
+import { contarPorEstado, descripcionLote, distribuirLotes, loteDeReferencia, MANZANAS_PLANO, VISTA_PLANO } from "@/lib/plano";
 import type { EstadoLote, Lote } from "@/lib/proyectos";
 
 const crear = (manzana: string, numero: number, estado: EstadoLote = "disponible"): Lote => ({
@@ -88,5 +88,29 @@ describe("descripcionLote (texto para lectores de pantalla)", () => {
   it("dice el lote, el área, las medidas, el precio y el estado", () => {
     expect(descripcionLote(crear("A", 5))).toBe("Mz. A - Lt. 5, 120 m², 8 m de frente por 15 m de fondo, S/ 37,200, disponible");
     expect(descripcionLote(crear("B", 2, "vendido"))).toMatch(/vendido$/);
+  });
+});
+
+describe("loteDeReferencia (el terreno que se muestra por defecto bajo la casa)", () => {
+  const con = (numero: number, estado: EstadoLote, precio: number, areaM2 = 120): Lote => ({ ...crear("A", numero, estado), precio, areaM2 });
+
+  it("es el lote disponible más barato, es decir, el del «precio desde»", () => {
+    const lotes = [con(1, "disponible", 50000), con(2, "disponible", 37200), con(3, "disponible", 62000)];
+    expect(loteDeReferencia(lotes)?.numero).toBe(2);
+  });
+
+  it("ignora los lotes vendidos y separados, aunque sean más baratos", () => {
+    const lotes = [con(1, "vendido", 30000), con(2, "separado", 31000), con(3, "disponible", 45000)];
+    expect(loteDeReferencia(lotes)?.numero).toBe(3);
+  });
+
+  it("si hay empate de precio, prefiere el de menor área y luego el de menor número", () => {
+    const lotes = [con(5, "disponible", 40000, 150), con(2, "disponible", 40000, 120), con(1, "disponible", 40000, 120)];
+    expect(loteDeReferencia(lotes)?.numero).toBe(1);
+  });
+
+  it("si no hay ninguno disponible usa el primero de la lista; sin lotes devuelve null", () => {
+    expect(loteDeReferencia([con(4, "vendido", 1), con(2, "separado", 2)])?.numero).toBe(4);
+    expect(loteDeReferencia([])).toBeNull();
   });
 });

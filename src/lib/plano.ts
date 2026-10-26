@@ -68,3 +68,11 @@ export function contarPorEstado(lotes: Lote[]): Record<EstadoLote, number> {
 /** Texto completo del lote para lectores de pantalla. */
 export const descripcionLote = (l: Lote) =>
   `${l.codigo}, ${formatearArea(l.areaM2)}, ${formatearMetros(l.frenteM)} de frente por ${formatearMetros(l.fondoM)} de fondo, ${formatearSoles(l.precio)}, ${l.estado}`;
+
+/** Lote cuyo terreno se muestra por defecto bajo la casa: el disponible más barato (el del «precio desde»). */
+export function loteDeReferencia(lotes: Lote[]): Lote | null {
+  if (lotes.length === 0) return null;
+  const disponibles = lotes.filter((l) => l.estado === "disponible");
+  if (disponibles.length === 0) return lotes[0];
+  return [...disponibles].sort((a, b) => a.precio - b.precio || a.areaM2 - b.areaM2 || a.numero - b.numero)[0];
+}

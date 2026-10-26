@@ -37,7 +37,8 @@ describe("CasaSobreLote", () => {
     expect(aviso).toHaveTextContent("144 m²");
     expect(aviso).toHaveTextContent("9 m × 16 m");
     expect(aviso).toHaveTextContent(/casa es solo una referencia/i);
-    expect(screen.getAllByText("Imagen referencial").length).toBeGreaterThan(0);
+    // La única etiqueta visible de la ficha está bajo el visor, junto al texto legal: aquí no se repite.
+    expect(screen.queryByText("Imagen referencial")).not.toBeInTheDocument();
   });
 
   it("se puede quitar el lote", () => {

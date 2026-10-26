@@ -78,3 +78,12 @@ Para subirlas, cuando vuelvas: `vercel env add AUTH_SECRET production` (y lo mis
 
 - **23 (Modo Sala, opcional):** omitido, como pediste.
 - **24 (revisión de seguridad) y 25 (ensayo de demo, README final y video RA):** no estaban en el alcance 4-22. Antes de la demo conviene correrlos; ya hay varias comprobaciones hechas (secretos fuera del código, prueba que impide que la clave de Gemini llegue al navegador, panel protegido, sin campo de DNI).
+
+### Pulido del visor (paso 1 del último bloque)
+
+- **Terreno verde con las medidas del lote:** la casa se muestra sobre un terreno del tamaño frente × fondo de un lote, con estacas en las esquinas y etiquetas "Frente / Fondo / área" que giran junto con el modelo. Se arma en el navegador (librería `@gltf-transform/core`, que solo se descarga al abrir el visor) a partir del mismo `.glb`; si algo falla se muestra la casa sola, sin errores.
+- **Qué lote se muestra:** por defecto el **disponible más barato** (el del "precio desde"); al elegir "Ver casa 3D en este lote" en el plano se rearma con las medidas de ese lote.
+- **Tamaño de la casa:** el modelo es el mismo para todos los lotes; se escala a una casa de ~40 m² de planta y nunca ocupa más del 85 % del frente ni del 60 % del fondo. Es una referencia, no una casa a escala real de un plano.
+- **Una sola etiqueta "Imagen referencial" visible**, bajo el visor y junto al texto legal (como pediste). En el visor hay otra **oculta** que aparece solo durante una sesión de RA de Chrome, para no perder la regla de mostrarla en la RA donde el navegador lo permite.
+- **En RA solo se ve la casa:** al iniciar la RA el terreno y las estacas se vuelven transparentes (y reaparecen al salir). En Quick Look (iPhone) y Scene Viewer (Android sin WebXR) el sistema arma su propia vista y **no pude verificar** si la losa verde queda oculta: hay que revisarlo con un celular real.
+- **PRD ajustado:** la línea sobre el plano ahora dice que no hay disponibilidad en tiempo real, pero sí un plano de lotización referencial con estados de demostración.

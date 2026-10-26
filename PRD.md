@@ -32,7 +32,7 @@ El cliente resuelve sus dudas por sí mismo y a cualquier hora, y el asesor reci
 **Núcleo (obligatorio):**
 
 1. Catálogo de 3 proyectos ficticios con nombre, ubicación, precio desde, metraje e imagen.
-2. Ficha del proyecto con visor 3D (`<model-viewer>` de Google) para girar y acercar una casa modelo sobre el lote, con etiqueta visible "Imagen referencial", datos del lote y financiamiento.
+2. Ficha del proyecto con visor 3D (`<model-viewer>` de Google) para girar y acercar una casa modelo sobre el lote, con etiqueta visible "Imagen referencial", datos del lote y financiamiento. La casa se muestra sobre un terreno verde con las medidas de un lote, y un plano de lotización referencial permite elegir un lote para ver sus datos, ver la casa sobre él o pedir información.
 3. Formulario de interés (lead) con nombre, celular, correo y proyecto, con consentimiento de datos personales (Ley 29733). El horario preferido de contacto es opcional. Un mismo celular es la misma persona: se actualiza el lead existente y se agrega el nuevo proyecto y las nuevas preguntas a su historial, con fecha del último contacto.
 4. Panel del asesor con usuario y contraseña que muestra leads por proyecto y las preguntas hechas al asistente.
 
@@ -70,7 +70,7 @@ El cliente resuelve sus dudas por sí mismo y a cualquier hora, y el asesor reci
 - No hay registro de clientes con cuenta ni contraseña.
 - El panel del asesor no exporta a Excel; solo muestra los leads en pantalla.
 - No hay notificaciones automáticas al asesor (correo o WhatsApp) cuando llega un lead.
-- No hay plano de lotes con disponibilidad en tiempo real; la ficha muestra datos referenciales.
+- No hay disponibilidad de lotes en tiempo real. Sí existe un **plano de lotización referencial, no a escala**, en la ficha de cada proyecto (manzanas, calle curva y parque), con estados de demostración (disponible, separado, vendido) que no vienen de ningún sistema de ventas; los lotes vendidos no se pueden elegir.
 - No hay simulador de cuotas ni cronograma de pagos; el financiamiento se muestra como texto.
 - No hay administración de proyectos desde el panel; los 3 proyectos se cargan como datos de demo.
 - El asistente no negocia precios, descuentos ni promociones; solo informa los datos registrados.

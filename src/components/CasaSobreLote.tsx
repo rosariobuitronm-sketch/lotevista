@@ -1,7 +1,6 @@
 "use client";
 
 import { useLote } from "@/components/ContextoLote";
-import { EtiquetaReferencial } from "@/components/EtiquetaReferencial";
 import { formatearArea, formatearMetros } from "@/lib/formato";
 
 // Aviso bajo el visor 3D cuando la persona eligió «Ver casa 3D en este lote» en el plano.
@@ -14,12 +13,9 @@ export function CasaSobreLote() {
       <p role="status" className="text-sm text-marino">
         {`Mostrando la casa referencial sobre el lote ${lote3d.codigo} (${formatearArea(lote3d.areaM2)}, ${formatearMetros(lote3d.frenteM)} × ${formatearMetros(lote3d.fondoM)}). La casa es solo una referencia: se vende únicamente el lote.`}
       </p>
-      <div className="flex flex-wrap items-center gap-3">
-        <EtiquetaReferencial compacta />
-        <button type="button" onClick={() => elegir3d(null)} className="text-sm font-semibold text-azul underline underline-offset-2">
-          Quitar el lote
-        </button>
-      </div>
+      <button type="button" onClick={() => elegir3d(null)} className="text-sm font-semibold text-azul underline underline-offset-2">
+        Quitar el lote
+      </button>
     </div>
   );
 }

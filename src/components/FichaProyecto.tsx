@@ -5,6 +5,7 @@ import { CasaSobreLote } from "@/components/CasaSobreLote";
 import { ProveedorLote } from "@/components/ContextoLote";
 import { FormularioInteres } from "@/components/FormularioInteres";
 import { PlanoLotes } from "@/components/PlanoLotes";
+import { loteDeReferencia } from "@/lib/plano";
 import { QrProyecto } from "@/components/QrProyecto";
 import { VisorCasa } from "@/components/VisorCasa";
 import { formatearArea, formatearMetros, formatearRangoArea, formatearSoles } from "@/lib/formato";
@@ -23,6 +24,7 @@ function Dato({ titulo, children }: { titulo: string; children: React.ReactNode 
 
 export function FichaProyecto({ proyecto }: { proyecto: ProyectoDetalle }) {
   const ubicacion = `${proyecto.distrito}, ${proyecto.provincia}, ${proyecto.departamento}`;
+  const referencia = loteDeReferencia(proyecto.lotes);
   return (
     <ProveedorLote>
     <article className="space-y-8">
@@ -42,6 +44,7 @@ export function FichaProyecto({ proyecto }: { proyecto: ProyectoDetalle }) {
             modeloUrl={proyecto.modeloArchivo}
             imagenUrl={proyecto.imagenUrl}
             proyectoSlug={proyecto.slug}
+            lote={referencia ?? undefined}
           />
           <CasaSobreLote />
         </section>
