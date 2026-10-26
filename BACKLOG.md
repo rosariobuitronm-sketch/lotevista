@@ -161,14 +161,16 @@ Nota de implementación: la etiqueta visible sobre la casa lleva siempre el text
 - [x] El mensaje de espera no revela si el usuario existe; los usuarios inexistentes también cuentan.
 - [x] Las pruebas simulan el tiempo sin esperar 15 minutos reales.
 
-### 12 — Panel de leads
+### 12 — Panel de leads ✅
 
 **Pruebas:** TDD (`GET /api/panel/leads`) + Manual · **Depende de:** 8, 10 · **ADR:** 0003, 0007
-- [ ] Lista leads con nombre, celular, correo, horario, último contacto y proyectos de interés; filtro por proyecto.
-- [ ] Cada lead muestra su historial (proyecto, canal, uso de 3D/RA, fecha).
-- [ ] Sin leads, estado vacío en español.
-- [ ] Los textos del cliente se muestran como texto, nunca como HTML (prueba con un nombre con etiquetas).
-- [ ] Sin sesión no se ve ningún dato personal por ninguna ruta.
+- [x] Lista leads con nombre, celular, correo, horario, último contacto y proyectos de interés; filtro por proyecto.
+- [x] Cada lead muestra su historial (proyecto, canal, uso de 3D/RA, fecha).
+- [x] Sin leads, estado vacío en español.
+- [x] Los textos del cliente se muestran como texto, nunca como HTML (prueba con un nombre con etiquetas).
+- [x] Sin sesión no se ve ningún dato personal por ninguna ruta.
+
+> **Nota:** Verificado en Edge de punta a punta (contra la rama de pruebas): un lead enviado desde el formulario público aparece en el panel con su historial.
 
 ### 13 — RA "Ver en tu espacio"
 
