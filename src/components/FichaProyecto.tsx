@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { AsistenteChat } from "@/components/AsistenteChat";
 import { CasaSobreLote } from "@/components/CasaSobreLote";
 import { ProveedorLote } from "@/components/ContextoLote";
 import { FormularioInteres } from "@/components/FormularioInteres";
@@ -122,6 +123,10 @@ export function FichaProyecto({ proyecto }: { proyecto: ProyectoDetalle }) {
           <p className="mt-1">{proyecto.entrega}</p>
         </div>
       </section>
+      <section id="asistente" className="max-w-3xl scroll-mt-4">
+        <AsistenteChat proyectoSlug={proyecto.slug} proyectoNombre={proyecto.nombre} />
+      </section>
+
       <QrProyecto slug={proyecto.slug} nombre={proyecto.nombre} />
 
       <section aria-labelledby="titulo-contacto" id="contacto" className="max-w-2xl scroll-mt-4">

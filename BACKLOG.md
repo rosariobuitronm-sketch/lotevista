@@ -242,13 +242,15 @@ Nota de implementación: la etiqueta visible sobre la casa lleva siempre el text
 
 > **Nota:** El criterio 3 queda por confirmar ya desplegado en Vercel: la ruta declara maxDuration = 30 y el build lo acepta.
 
-### 20 — Ventana del asistente
+### 20 — Ventana del asistente ✅
 
 **Pruebas:** Manual · **Depende de:** 19, 6
-- [ ] Chat en la ficha con el aviso fijo: "No compartas datos personales en el chat. Si deseas que te contactemos, usa el formulario."
-- [ ] Indicador de carga; al derivar o llegar al límite, el mensaje invita al formulario.
-- [ ] El historial vive solo en el navegador (estado y `sessionStorage`) y sobrevive a recargar la pestaña.
-- [ ] Se usa bien en celular.
+- [x] Chat en la ficha con el aviso fijo: "No compartas datos personales en el chat. Si deseas que te contactemos, usa el formulario."
+- [x] Indicador de carga; al derivar o llegar al límite, el mensaje invita al formulario.
+- [x] El historial vive solo en el navegador (estado y `sessionStorage`) y sobrevive a recargar la pestaña.
+- [x] Se usa bien en celular.
+
+> **Nota:** Verificado en Edge en ancho de celular (390 px) con la IA real: sugerencias, pregunta con Enter, indicador de carga, derivación con enlace al formulario, historial que sobrevive a recargar y sin desborde horizontal. Falta usarlo en un celular físico.
 
 ### 21 — Preguntas del chat en el lead y el panel
 
