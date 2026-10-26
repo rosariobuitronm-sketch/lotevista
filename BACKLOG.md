@@ -279,13 +279,15 @@ Nota de implementación: la etiqueta visible sobre la casa lleva siempre el text
 - [ ] `/sala/[slug]` muestra el modelo girando en pantalla completa y un QR hacia la ficha con canal `qr_sala`.
 - [ ] Lleva la etiqueta "Imagen referencial". Se recorta primero si el tiempo aprieta.
 
-### 24 — Revisión de seguridad y secretos
+### 24 — Revisión de seguridad y secretos ⚠️ parcial: falta verificación manual
 
 **Pruebas:** Manual · **Depende de:** todos
 - [ ] Ninguna clave, contraseña ni cadena de conexión en el repositorio ni en su historial; `.env.local` ignorado.
 - [ ] Variables de Vercel configuradas (`DATABASE_URL`, `GEMINI_API_KEY`, `AUTH_SECRET`, `IP_HASH_SECRET`, contraseñas de demo) y distintas a las de pruebas.
 - [ ] Cada ruta del panel responde 401 o redirige sin sesión; no existe campo de DNI en ningún lugar.
 - [ ] Las pruebas con BD apuntan solo a la rama de pruebas.
+
+> **Nota:** Informe en SECURITY-REPORT.md. Sin hallazgos CRITICAL; el HIGH (credencial de demo pública) y dos MEDIUM son decisiones conscientes del Product Owner (D1 a D3). Los criterios 1 (secretos) y 4 (pruebas con BD solo en la rama de pruebas) están verificados; los 2 y 3 se completan con la rotación de claves y la lista de rutas del panel que cubrirá la suite E2E.
 
 ### 25 — Ensayo de demo, README y video RA
 
