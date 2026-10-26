@@ -144,14 +144,14 @@ Nota de implementación: la etiqueta visible sobre la casa lleva siempre el text
 
 > **Nota:** Verificado en Edge de punta a punta (contra la rama de pruebas): enviar vacío muestra los errores, el doble clic envía un solo POST y el lead queda guardado con consentimiento, horario y canal web.
 
-### 10 — Login del asesor
+### 10 — Login del asesor ✅
 
 **Pruebas:** TDD · **Depende de:** 2 · **ADR:** 0004
-- [ ] `/panel/login` inicia sesión con credenciales correctas y lleva a `/panel`.
-- [ ] La contraseña se compara contra el hash bcrypt y nunca se registra en texto plano.
-- [ ] Cookie `httpOnly`, `secure`, `sameSite=lax`, firmada con `AUTH_SECRET`, caduca en 8 horas.
-- [ ] Sin sesión, `/panel` redirige al login y `/api/panel/*` responde 401.
-- [ ] Credenciales erróneas muestran "Usuario o contraseña incorrectos"; el cierre de sesión borra la cookie.
+- [x] `/panel/login` inicia sesión con credenciales correctas y lleva a `/panel`.
+- [x] La contraseña se compara contra el hash bcrypt y nunca se registra en texto plano.
+- [x] Cookie `httpOnly`, `secure`, `sameSite=lax`, firmada con `AUTH_SECRET`, caduca en 8 horas.
+- [x] Sin sesión, `/panel` redirige al login y `/api/panel/*` responde 401.
+- [x] Credenciales erróneas muestran "Usuario o contraseña incorrectos"; el cierre de sesión borra la cookie.
 
 ### 11 — Bloqueo por intentos fallidos
 
