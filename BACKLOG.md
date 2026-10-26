@@ -232,15 +232,17 @@ Nota de implementación: la etiqueta visible sobre la casa lleva siempre el text
 
 > **Nota:** El bloqueo se prueba en la pregunta 21 de sesión y en la 501 de IP (con filas precargadas en la rama de pruebas, sin repetir 500 llamadas).
 
-### 19 — Ruta `/api/asistente` ⚠️ parcial: falta verificación manual
+### 19 — Ruta `/api/asistente` ✅
 
 **Pruebas:** TDD · **Depende de:** 16, 17, 18 · **ADR:** 0003, 0005
 - [x] Valida la entrada y limita el largo de la pregunta; aplica límites, lógica y respaldo; responde `{ ok, datos | error }`.
 - [x] No guarda preguntas ni respuestas en la BD.
-- [ ] Se verifica en Vercel que el tiempo máximo de las funciones alcanza para los 8 s; si no, se ajusta y se anota.
+- [x] Se verifica en Vercel que el tiempo máximo de las funciones alcanza para los 8 s; si no, se ajusta y se anota.
 - [x] La clave de Gemini no aparece en respuestas ni en el código del navegador.
 
 > **Nota:** El criterio 3 queda por confirmar ya desplegado en Vercel: la ruta declara maxDuration = 30 y el build lo acepta.
+
+> **Nota:** Desplegado con maxDuration = 30 (sobra para los 8 s de espera). En producción las respuestas de la IA tardaron 1.5 a 2.7 s y el filtro de descuentos 0.5 s; el caso de espera completa de 8 s lo cubren las pruebas con temporizadores simulados, no se provocó en vivo.
 
 ### 20 — Ventana del asistente ✅
 
@@ -261,13 +263,15 @@ Nota de implementación: la etiqueta visible sobre la casa lleva siempre el text
 
 > **Nota:** Pruebas de integración contra la rama de pruebas y verificación en Edge: dos preguntas del chat viajaron con el formulario y quedaron en lead_preguntas con su respuesta y si el asistente sabía.
 
-### 22 — Modo holograma
+### 22 — Modo holograma ⚠️ parcial: falta verificación manual
 
 **Pruebas:** Manual · **Depende de:** 6
-- [ ] `/holograma/[slug]` muestra pantalla negra con el modelo 4 veces (arriba, abajo, izquierda, derecha) girando.
-- [ ] Las 4 vistas llevan la etiqueta "Imagen referencial".
-- [ ] Funciona a pantalla completa en celular o tablet; un lead desde esta página queda con canal `holograma`.
+- [x] `/holograma/[slug]` muestra pantalla negra con el modelo 4 veces (arriba, abajo, izquierda, derecha) girando.
+- [x] Las 4 vistas llevan la etiqueta "Imagen referencial".
+- [x] Funciona a pantalla completa en celular o tablet; un lead desde esta página queda con canal `holograma`.
 - [ ] Se probó sobre la pirámide casera o se anota que no se pudo.
+
+> **Nota:** Verificado en Edge con tamaño de tableta (1024x768): pantalla negra, las 4 vistas orientadas al centro con su etiqueta, controles que se esconden solos y un lead creado desde esta página quedó con canal holograma (comprobado en la base de pruebas). **No se pudo probar sobre la pirámide ni en una tableta física** (criterio 4): hace falta que lo pruebes con tu pirámide casera; el botón de pantalla completa solo se probó por programa.
 
 ### 23 — Modo Sala (opcional)
 
