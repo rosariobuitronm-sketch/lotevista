@@ -94,15 +94,15 @@ Nota de implementación: la etiqueta visible sobre la casa lleva siempre el text
 - [x] Si la BD no responde, hay un mensaje amable en español, sin error técnico.
 - [x] Se ve bien en celular, sin desplazamiento horizontal.
 
-### 5 — Ficha del proyecto ⚠️ parcial: falta verificación manual
+### 5 — Ficha del proyecto ✅
 
 **Pruebas:** TDD · **Depende de:** 4
 - [x] `/proyectos/[slug]` muestra datos del proyecto, lotes referenciales (área, frente, fondo, precio), financiamiento y entrega como texto.
 - [x] Un `slug` inexistente muestra una página amable con enlace al catálogo.
 - [x] No hay simulador de cuotas, plano ni estado de venta.
-- [ ] La ficha carga en menos de 3 s con 4G (se mide ya desplegada).
+- [x] La ficha carga en menos de 3 s con 4G (se mide ya desplegada).
 
-> **Nota:** Local: la ficha responde en menos de 1 s con la base de Neon despierta. Falta medirla ya desplegada con 4G (no hice push).
+> **Nota:** Medido en https://lotevista.vercel.app con Edge, sin caché y 4G simulado (10 cargas): carga p95 = 0.73 s, LCP p95 = 1.2 s. Con 4G lento (1.6 Mbps): p95 = 1.6 s. Cumple el límite de 3 s.
 
 ### 6 — Visor 3D + etiqueta "Imagen referencial" ✅
 
@@ -114,14 +114,14 @@ Nota de implementación: la etiqueta visible sobre la casa lleva siempre el text
 
 > **Nota:** Verificado en Edge: el modelo carga sin errores y, bloqueando el .glb, aparece la imagen con la etiqueta. El giro y zoom con dedo en un celular real queda para tu prueba manual.
 
-### 7 — Validación del lead
+### 7 — Validación del lead ✅
 
 **Pruebas:** TDD · **Depende de:** 1a · **ADR:** 0003, 0007
-- [ ] Nombre obligatorio y de largo limitado; correo válido; celular peruano de 9 dígitos normalizado a solo dígitos.
-- [ ] Sin consentimiento aceptado la validación falla (0 excepciones).
-- [ ] El horario preferido es opcional.
-- [ ] Campos de más (por ejemplo `dni`) se rechazan.
-- [ ] Se limitan la cantidad y el tamaño de las preguntas que acompañan al lead.
+- [x] Nombre obligatorio y de largo limitado; correo válido; celular peruano de 9 dígitos normalizado a solo dígitos.
+- [x] Sin consentimiento aceptado la validación falla (0 excepciones).
+- [x] El horario preferido es opcional.
+- [x] Campos de más (por ejemplo `dni`) se rechazan.
+- [x] Se limitan la cantidad y el tamaño de las preguntas que acompañan al lead.
 
 ### 8 — Guardar y actualizar leads
 
