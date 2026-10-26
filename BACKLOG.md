@@ -201,20 +201,24 @@ Nota de implementación: la etiqueta visible sobre la casa lleva siempre el text
 
 > **Nota:** Verificado por programa: el QR se decodifica a https://…/proyectos/<slug>?canal=qr_sala y la imagen carga en la ficha. **Falta escanearlo con un celular real** (criterio 2).
 
-### 16 — Asistente: lógica acotada a los datos
+### 16 — Asistente: lógica acotada a los datos ⚠️ parcial: falta verificación manual
 
 **Pruebas:** TDD (Gemini simulado) · **Depende de:** 2 · **ADR:** 0005
-- [ ] La instrucción a Gemini usa solo los datos del proyecto: sin negociar precios ni descuentos, sin agendar y marcando "no sé" cuando falte información.
-- [ ] La respuesta `{ respuesta, sabe }` se valida; formato inválido o `sabe` falso dan la derivación a un asesor.
-- [ ] Con el simulado: 8 de 10 preguntas sobre datos reciben la respuesta esperada y 5 de 5 preguntas fuera de datos derivan sin inventar.
+- [x] La instrucción a Gemini usa solo los datos del proyecto: sin negociar precios ni descuentos, sin agendar y marcando "no sé" cuando falte información.
+- [x] La respuesta `{ respuesta, sabe }` se valida; formato inválido o `sabe` falso dan la derivación a un asesor.
+- [x] Con el simulado: 8 de 10 preguntas sobre datos reciben la respuesta esperada y 5 de 5 preguntas fuera de datos derivan sin inventar.
 - [ ] `GEMINI_API_KEY` y `GEMINI_MODEL` solo se leen en el servidor; las pruebas nunca usan la clave real.
 
-### 17 — Asistente: respaldo FAQ
+> **Nota:** El criterio 4 (la clave solo se lee en el servidor) se cierra con la ruta del ítem 19.
+
+### 17 — Asistente: respaldo FAQ ✅
 
 **Pruebas:** TDD · **Depende de:** 16 · **ADR:** 0005
-- [ ] Si Gemini falla, agota la cuota o tarda más de 8 s, se busca en el FAQ del proyecto por palabras clave.
-- [ ] Con coincidencia responde el FAQ; sin ella, deriva a un asesor.
-- [ ] El cliente nunca ve un error técnico (se prueba cada tipo de falla) y una prueba confirma el corte a los 8 s.
+- [x] Si Gemini falla, agota la cuota o tarda más de 8 s, se busca en el FAQ del proyecto por palabras clave.
+- [x] Con coincidencia responde el FAQ; sin ella, deriva a un asesor.
+- [x] El cliente nunca ve un error técnico (se prueba cada tipo de falla) y una prueba confirma el corte a los 8 s.
+
+> **Nota:** Las pruebas cubren cuota agotada, servicio caído, sin conexión, falta de clave, respuesta bloqueada y error genérico, más el corte exacto a los 8 s con temporizadores simulados.
 
 ### 18 — Asistente: límites
 
