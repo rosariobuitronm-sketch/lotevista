@@ -123,14 +123,14 @@ Nota de implementación: la etiqueta visible sobre la casa lleva siempre el text
 - [x] Campos de más (por ejemplo `dni`) se rechazan.
 - [x] Se limitan la cantidad y el tamaño de las preguntas que acompañan al lead.
 
-### 8 — Guardar y actualizar leads
+### 8 — Guardar y actualizar leads ✅
 
 **Pruebas:** TDD (rama de pruebas) · **Depende de:** 2, 7 · **ADR:** 0006, 0007
-- [ ] Un lead nuevo se guarda con sus datos, consentimiento (fecha y versión), interés en el proyecto y fechas de creación y último contacto.
-- [ ] El mismo celular no crea otro lead: agrega interés y preguntas, actualiza el último contacto y no borra nada.
-- [ ] Dos envíos del mismo lead y proyecto en menos de 10 minutos se fusionan.
-- [ ] Todo ocurre en una transacción; sin consentimiento no se guarda nada.
-- [ ] Las pruebas usan solo la rama de pruebas y limpian sus datos.
+- [x] Un lead nuevo se guarda con sus datos, consentimiento (fecha y versión), interés en el proyecto y fechas de creación y último contacto.
+- [x] El mismo celular no crea otro lead: agrega interés y preguntas, actualiza el último contacto y no borra nada.
+- [x] Dos envíos del mismo lead y proyecto en menos de 10 minutos se fusionan.
+- [x] Todo ocurre en una transacción; sin consentimiento no se guarda nada.
+- [x] Las pruebas usan solo la rama de pruebas y limpian sus datos.
 
 ### 9 — Formulario de interés
 
