@@ -202,4 +202,11 @@ Los hallazgos SP-04, SP-05 y SP-09 son `CODE FIX` y SP-11 es `PROCESS / HARNESS 
 |---|---|---|
 | SP-04 (cabeceras de seguridad) | **Corregido** el 25 de oct de 2026 | `next.config.ts` ahora envía `Content-Security-Policy: frame-ancestors 'none'`, `X-Frame-Options: DENY`, `X-Content-Type-Options: nosniff` y `Referrer-Policy`, y desactiva `X-Powered-By`. No se restringe la cámara ni el seguimiento espacial (la RA los necesita). Prueba: `src/lib/cabeceras.test.ts`. |
 | SP-05 (sin límite en `/api/leads`) | **Corregido** el 25 de oct de 2026 | Tope de 20 envíos por IP en 24 h (solo se guarda el hash, con una clave distinta a la del asistente); el envío 21 responde 429 con un mensaje amable y no guarda nada. Los envíos inválidos no gastan el tope. Pruebas: `src/app/api/leads/route.test.ts`. **Nota:** en una sala de ventas o feria donde muchas personas comparten una IP, 20 puede quedarse corto; es la constante `LIMITE_LEADS_IP` de `src/lib/asistente/limites.ts`. |
-| SP-01, SP-02, SP-03, SP-06 a SP-11 | Pendientes o aceptados | Ver «Gobernanza / Decisión requerida». |
+| SP-01, SP-02, SP-03, SP-06 a SP-11 | Aceptados para la demo (SP-06 y SP-09 por decisión del Product Owner del 25 de oct de 2026; SP-11 sigue como mejora de proceso) | Ver «Gobernanza / Decisión requerida» y «Decisión del Product Owner». |
+
+## Decisión del Product Owner (25 de octubre de 2026)
+
+| Hallazgo | Decisión | Condición |
+|---|---|---|
+| SP-06 (retención de 12 meses sin borrado automático) | **Riesgo aceptado para la demo** | Todos los datos son ficticios. Antes de recibir datos reales hay que definir la política de retención, un borrado automático o manual a los 12 meses y la atención de solicitudes de cancelación (Ley 29733). |
+| SP-09 (login sin límite por IP; la tabla `intentos_login` crece sin limpieza) | **Riesgo aceptado para la demo** | El bloqueo por usuario (5 fallos en 15 minutos) se mantiene. Antes de un uso real: límite por IP y limpieza periódica de `intentos_login`. |
