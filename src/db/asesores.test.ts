@@ -44,8 +44,6 @@ describe.skipIf(!urlPrueba)("crearAsesores (rama de pruebas)", () => {
       throw new Error("DATABASE_URL_TEST apunta a la misma base que DATABASE_URL: se cancela");
     }
     pool = new Pool({ connectionString: urlPrueba });
-    const { readFileSync } = await import("node:fs");
-    await pool.query(readFileSync("db/schema.sql", "utf8"));
   });
 
   afterAll(async () => {

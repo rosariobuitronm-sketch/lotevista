@@ -1,5 +1,5 @@
 // @vitest-environment node
-import { existsSync, readFileSync, statSync } from "node:fs";
+import { existsSync, statSync } from "node:fs";
 import { join } from "node:path";
 import { Pool } from "@neondatabase/serverless";
 import { afterAll, beforeAll, describe, expect, it } from "vitest";
@@ -9,7 +9,6 @@ const urlPrueba = process.env.DATABASE_URL_TEST;
 const urlDemo = process.env.DATABASE_URL;
 
 const host = (url?: string) => (url ? new URL(url).hostname : "");
-const leer = (archivo: string) => readFileSync(join(process.cwd(), "db", archivo), "utf8");
 
 const TABLAS = [
   "proyectos",
@@ -31,9 +30,8 @@ describe.skipIf(!urlPrueba)("esquema y datos demo (rama de pruebas)", () => {
     if (host(urlPrueba) === host(urlDemo)) {
       throw new Error("DATABASE_URL_TEST apunta a la misma base que DATABASE_URL: se cancela");
     }
+    // El esquema y el seed ya los aplicó vitest.global-setup.ts (dos veces seguidas).
     pool = new Pool({ connectionString: urlPrueba });
-    await pool.query(leer("schema.sql"));
-    await pool.query(leer("seed.sql"));
   });
 
   afterAll(async () => {
@@ -44,11 +42,11 @@ describe.skipIf(!urlPrueba)("esquema y datos demo (rama de pruebas)", () => {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any -- filas de la BD, sin tipo fijo en pruebas
     (await pool.query(texto, valores)).rows as Record<string, any>[];
 
-  it("el esquema y el seed se pueden ejecutar dos veces sin error ni duplicados", async () => {
-    await pool.query(leer("schema.sql"));
-    await pool.query(leer("seed.sql"));
-    const [{ n }] = await filas("SELECT count(*)::int AS n FROM proyectos");
-    expect(n).toBe(3);
+  it("el esquema y el seed, aplicados dos veces seguidas, no dejan duplicados", async () => {
+    const cuentas = async (tabla: string) => (await filas(`SELECT count(*)::int AS n FROM ${tabla}`))[0].n;
+    expect(await cuentas("proyectos")).toBe(3);
+    expect(await cuentas("lotes")).toBe(15);
+    expect(await cuentas("faq")).toBe(24);
   });
 
   it("crea las 9 tablas del ADR 0007", async () => {

@@ -20,6 +20,15 @@ export async function POST(request: Request) {
 
   try {
     const resultado = await iniciarSesion(getSql(), entrada);
+    if (!resultado.ok && resultado.motivo === "bloqueado") {
+      // El mismo mensaje exista o no el usuario (los inexistentes también cuentan intentos).
+      const espera = Math.max(1, Math.ceil((resultado.bloqueadoHasta.getTime() - Date.now()) / 1000));
+      return responderError(
+        429,
+        { codigo: "bloqueado", mensaje: "Demasiados intentos fallidos. Espera 15 minutos e inténtalo de nuevo." },
+        { "Retry-After": String(espera) },
+      );
+    }
     if (!resultado.ok) {
       return responderError(401, { codigo: "credenciales", mensaje: MENSAJE_CREDENCIALES });
     }

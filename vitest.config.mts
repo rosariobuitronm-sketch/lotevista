@@ -11,6 +11,7 @@ export default defineConfig(({ mode }) => ({
   test: {
     environment: "jsdom",
     setupFiles: ["./vitest.setup.ts"],
+    globalSetup: ["./vitest.global-setup.ts"],
     include: ["src/**/*.test.{ts,tsx}"],
     // Solo DATABASE_URL* de .env.local (las pruebas de datos usan DATABASE_URL_TEST)
     env: loadEnv(mode, process.cwd(), "DATABASE_URL"),

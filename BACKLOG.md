@@ -153,13 +153,13 @@ Nota de implementación: la etiqueta visible sobre la casa lleva siempre el text
 - [x] Sin sesión, `/panel` redirige al login y `/api/panel/*` responde 401.
 - [x] Credenciales erróneas muestran "Usuario o contraseña incorrectos"; el cierre de sesión borra la cookie.
 
-### 11 — Bloqueo por intentos fallidos
+### 11 — Bloqueo por intentos fallidos ✅
 
 **Pruebas:** TDD · **Depende de:** 10 · **ADR:** 0004
-- [ ] 5 fallos seguidos bloquean el login 15 minutos, incluso con la contraseña correcta.
-- [ ] Pasado el tiempo vuelve a funcionar; un login correcto reinicia el contador.
-- [ ] El mensaje de espera no revela si el usuario existe; los usuarios inexistentes también cuentan.
-- [ ] Las pruebas simulan el tiempo sin esperar 15 minutos reales.
+- [x] 5 fallos seguidos bloquean el login 15 minutos, incluso con la contraseña correcta.
+- [x] Pasado el tiempo vuelve a funcionar; un login correcto reinicia el contador.
+- [x] El mensaje de espera no revela si el usuario existe; los usuarios inexistentes también cuentan.
+- [x] Las pruebas simulan el tiempo sin esperar 15 minutos reales.
 
 ### 12 — Panel de leads
 

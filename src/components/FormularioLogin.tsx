@@ -4,7 +4,11 @@ import { useRef, useState } from "react";
 
 type Props = { alExito?: () => void };
 
-const irAlPanel = () => window.location.assign("/panel");
+const irAlPanel = () => {
+  // Recarga completa a propósito: el servidor debe ver la cookie de sesión recién creada.
+  // eslint-disable-next-line @next/next/no-location-assign-relative-destination
+  window.location.href = "/panel";
+};
 
 export function FormularioLogin({ alExito = irAlPanel }: Props) {
   const [usuario, setUsuario] = useState("");

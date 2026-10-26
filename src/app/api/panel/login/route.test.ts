@@ -78,6 +78,31 @@ describe.skipIf(!urlPrueba)("POST /api/panel/login y /logout (rama de pruebas)",
     }
   });
 
+  it("tras 5 fallos seguidos responde 429 con mensaje de espera, incluso con la contraseña correcta", async () => {
+    for (let i = 0; i < 4; i++) {
+      expect((await pedir(login, { usuario: USUARIO, clave: "mala" })).status).toBe(401);
+    }
+    const quinto = await pedir(login, { usuario: USUARIO, clave: "mala" });
+    expect(quinto.status).toBe(429);
+
+    const correcta = await pedir(login, { usuario: USUARIO, clave: CLAVE });
+    expect(correcta.status).toBe(429);
+    expect(correcta.headers.get("set-cookie")).toBeNull();
+    expect(Number(correcta.headers.get("retry-after"))).toBeGreaterThan(0);
+    expect(Number(correcta.headers.get("retry-after"))).toBeLessThanOrEqual(15 * 60);
+    expect(await correcta.json()).toEqual({
+      ok: false,
+      error: { codigo: "bloqueado", mensaje: "Demasiados intentos fallidos. Espera 15 minutos e inténtalo de nuevo." },
+    });
+  }, 30_000);
+
+  it("el mensaje de bloqueo de un usuario inexistente es idéntico al de uno real", async () => {
+    for (let i = 0; i < 5; i++) await pedir(login, { usuario: "fantasma_ruta", clave: "x" });
+    const falso = await pedir(login, { usuario: "fantasma_ruta", clave: "x" });
+    expect(falso.status).toBe(429);
+    expect((await falso.json()).error.mensaje).toBe("Demasiados intentos fallidos. Espera 15 minutos e inténtalo de nuevo.");
+  }, 30_000);
+
   it("no devuelve la contraseña ni el hash en ninguna respuesta", async () => {
     const res = await pedir(login, { usuario: USUARIO, clave: CLAVE });
     const texto = JSON.stringify(await res.json()) + (res.headers.get("set-cookie") ?? "");

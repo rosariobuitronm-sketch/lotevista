@@ -2,7 +2,11 @@
 
 import { useState } from "react";
 
-const irAlLogin = () => window.location.assign("/panel/login");
+const irAlLogin = () => {
+  // Recarga completa a propósito: así no queda ningún dato del panel en memoria.
+  // eslint-disable-next-line @next/next/no-location-assign-relative-destination
+  window.location.href = "/panel/login";
+};
 
 export function BotonCerrarSesion({ alTerminar = irAlLogin }: { alTerminar?: () => void }) {
   const [cerrando, setCerrando] = useState(false);
