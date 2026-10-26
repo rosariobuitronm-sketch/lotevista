@@ -21,7 +21,9 @@ type Opciones = {
   fetchFn?: typeof fetch;
 };
 
-export const MODELO_POR_DEFECTO = "gemini-2.5-flash";
+// Elegido midiendo con la clave real (ver PENDIENTES.md): ~1 s de respuesta. gemini-2.5-* ya no está disponible para cuentas
+// nuevas (404) y gemini-3.8-flash tardó casi 2 minutos. Se cambia con la variable GEMINI_MODEL, sin tocar el código.
+export const MODELO_POR_DEFECTO = "gemini-3.5-flash-lite";
 
 const ESQUEMA_RESPUESTA = {
   type: "OBJECT",

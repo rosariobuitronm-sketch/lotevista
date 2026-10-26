@@ -1,11 +1,18 @@
 // @vitest-environment node
 import { describe, expect, it, vi } from "vitest";
-import { crearGeneradorGemini, ErrorGemini } from "@/lib/asistente/gemini";
+import { crearGeneradorGemini, ErrorGemini, MODELO_POR_DEFECTO } from "@/lib/asistente/gemini";
 
 // Siempre con un fetch simulado y una clave FALSA: nunca se llama a Google en las pruebas.
 const CLAVE = "clave-falsa-de-prueba-123";
 const ok = (texto: string) =>
   Promise.resolve(new Response(JSON.stringify({ candidates: [{ content: { parts: [{ text: texto }] } }] }), { status: 200 }));
+
+describe("modelo por defecto", () => {
+  it("es un modelo 3.x ligero (rápido), porque la IA tiene solo 8 segundos para responder", () => {
+    expect(MODELO_POR_DEFECTO).toBe("gemini-3.5-flash-lite");
+    expect(MODELO_POR_DEFECTO).not.toMatch(/^gemini-2.5/); // ya no existe para cuentas nuevas
+  });
+});
 
 describe("crearGeneradorGemini", () => {
   it("llama al modelo configurado con la clave en una cabecera (no en la URL) y pide JSON estructurado", async () => {

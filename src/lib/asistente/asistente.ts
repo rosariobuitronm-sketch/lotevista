@@ -35,18 +35,24 @@ export async function responderPregunta(args: {
     }, tiempoMaxMs);
   });
 
+  // La IA falló, no hay cuota, tardó demasiado o devolvió texto dañado: respaldo de FAQ y, si no hay coincidencia, derivación.
+  const respaldo = (): RespuestaAsistente => {
+    const entrada = buscarEnFaq(pregunta, proyecto.faq);
+    return entrada ? { respuesta: entrada.respuesta, sabe: true, origen: "faq" } : derivacion();
+  };
+
   let texto: string;
   try {
     texto = await Promise.race([generar(construirInstruccion(proyecto), pregunta, { signal: control.signal }), limite]);
   } catch {
-    // La IA falló, no hay cuota o tardó demasiado: respaldo de FAQ y, si no hay coincidencia, derivación.
-    const entrada = buscarEnFaq(pregunta, proyecto.faq);
-    return entrada ? { respuesta: entrada.respuesta, sabe: true, origen: "faq" } : derivacion();
+    return respaldo();
   } finally {
     clearTimeout(reloj);
   }
 
   const parseada = parsearRespuestaModelo(texto);
   if (!parseada || !parseada.sabe) return derivacion(); // formato inválido o «no sé»
+  // Visto con la IA real: a veces devuelve letras corruptas (carácter de reemplazo). Nunca se le muestra al cliente.
+  if (parseada.respuesta.includes("�")) return respaldo();
   return { respuesta: parseada.respuesta, sabe: true, origen: "ia" };
 }

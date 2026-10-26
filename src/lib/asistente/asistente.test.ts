@@ -119,6 +119,22 @@ describe("formato inválido o «no sé»: derivación (ADR 0005)", () => {
   });
 });
 
+describe("respuestas corruptas de la IA", () => {
+  const corrupta = async () => JSON.stringify({ respuesta: "Algarrobos de Sunampe est� en Sunampe, Chincha.", sabe: true });
+
+  it("una respuesta con caracteres de reemplazo (texto dañado) no se muestra: se usa el FAQ", async () => {
+    const r = await responderPregunta({ pregunta: "¿Dónde queda el proyecto?", proyecto, generar: corrupta });
+    expect(r.origen).toBe("faq");
+    expect(r.respuesta).not.toContain("�");
+    expect(r.respuesta).toBe("Algarrobos de Sunampe está en Sunampe, Chincha, Ica.");
+  });
+
+  it("si además no hay coincidencia en el FAQ, deriva a un asesor", async () => {
+    const r = await responderPregunta({ pregunta: "¿Hay piscina?", proyecto, generar: corrupta });
+    expect(r).toEqual({ respuesta: MENSAJE_DERIVACION, sabe: false, origen: "derivacion" });
+  });
+});
+
 describe("respaldo de FAQ cuando la IA falla (ADR 0005)", () => {
   const fallas: [string, () => Promise<string>][] = [
     ["cuota agotada", async () => { throw new ErrorGemini("cuota", "429"); }],

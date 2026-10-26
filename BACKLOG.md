@@ -201,15 +201,17 @@ Nota de implementación: la etiqueta visible sobre la casa lleva siempre el text
 
 > **Nota:** Verificado por programa: el QR se decodifica a https://…/proyectos/<slug>?canal=qr_sala y la imagen carga en la ficha. **Falta escanearlo con un celular real** (criterio 2).
 
-### 16 — Asistente: lógica acotada a los datos ⚠️ parcial: falta verificación manual
+### 16 — Asistente: lógica acotada a los datos ✅
 
 **Pruebas:** TDD (Gemini simulado) · **Depende de:** 2 · **ADR:** 0005
 - [x] La instrucción a Gemini usa solo los datos del proyecto: sin negociar precios ni descuentos, sin agendar y marcando "no sé" cuando falte información.
 - [x] La respuesta `{ respuesta, sabe }` se valida; formato inválido o `sabe` falso dan la derivación a un asesor.
 - [x] Con el simulado: 8 de 10 preguntas sobre datos reciben la respuesta esperada y 5 de 5 preguntas fuera de datos derivan sin inventar.
-- [ ] `GEMINI_API_KEY` y `GEMINI_MODEL` solo se leen en el servidor; las pruebas nunca usan la clave real.
+- [x] `GEMINI_API_KEY` y `GEMINI_MODEL` solo se leen en el servidor; las pruebas nunca usan la clave real.
 
 > **Nota:** El criterio 4 (la clave solo se lee en el servidor) se cierra con la ruta del ítem 19.
+
+> **Nota:** Prueba de seguridad automática: GEMINI_API_KEY y GEMINI_MODEL solo se leen en src/app/api/asistente/route.ts y ningún componente de navegador menciona Gemini.
 
 ### 17 — Asistente: respaldo FAQ ✅
 
@@ -230,13 +232,15 @@ Nota de implementación: la etiqueta visible sobre la casa lleva siempre el text
 
 > **Nota:** El bloqueo se prueba en la pregunta 21 de sesión y en la 501 de IP (con filas precargadas en la rama de pruebas, sin repetir 500 llamadas).
 
-### 19 — Ruta `/api/asistente`
+### 19 — Ruta `/api/asistente` ⚠️ parcial: falta verificación manual
 
 **Pruebas:** TDD · **Depende de:** 16, 17, 18 · **ADR:** 0003, 0005
-- [ ] Valida la entrada y limita el largo de la pregunta; aplica límites, lógica y respaldo; responde `{ ok, datos | error }`.
-- [ ] No guarda preguntas ni respuestas en la BD.
+- [x] Valida la entrada y limita el largo de la pregunta; aplica límites, lógica y respaldo; responde `{ ok, datos | error }`.
+- [x] No guarda preguntas ni respuestas en la BD.
 - [ ] Se verifica en Vercel que el tiempo máximo de las funciones alcanza para los 8 s; si no, se ajusta y se anota.
-- [ ] La clave de Gemini no aparece en respuestas ni en el código del navegador.
+- [x] La clave de Gemini no aparece en respuestas ni en el código del navegador.
+
+> **Nota:** El criterio 3 queda por confirmar ya desplegado en Vercel: la ruta declara maxDuration = 30 y el build lo acepta.
 
 ### 20 — Ventana del asistente
 
